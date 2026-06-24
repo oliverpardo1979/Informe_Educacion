@@ -1,0 +1,133 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[top=2.5cm, bottom=2.5cm, left=3cm, right=3cm]{geometry}
+\usepackage{mdframed}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage[margin=10pt, font=small, labelfont=bf]{caption}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{comment}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+
+\setlength{\textfloatsep}{18pt plus 2pt minus 4pt}
+\setlength{\floatsep}{12pt plus 2pt minus 2pt}
+\setlength{\intextsep}{14pt plus 2pt minus 2pt}
+\setstretch{1.15}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{8pt}
+
+\titleformat{\section}
+  {\large\bfseries}{\thesection.}{0.5em}{}
+  [\vspace{2pt}\hrule\vspace{4pt}]
+\titleformat{\subsection}
+  {\normalsize\bfseries}{\thesubsection.}{0.5em}{}
+\titlespacing{\section}{0pt}{18pt}{8pt}
+\titlespacing{\subsection}{0pt}{14pt}{6pt}
+
+\hypersetup{colorlinks=true, linkcolor=blue!60!black}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize Centro Javeriano de Competitividad}
+\fancyhead[R]{\footnotesize \reportnumber}
+\cfoot{\thepage}
+\setlength{\headheight}{14pt}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\geometry{margin=1in}
+\graphicspath{{Paper/figures/}{figures/}}
+\newcommand{\tablepath}{Paper/tables/}
+\newcommand{\figurelang}{es}
+\newcommand{\reportseries}{Informes sobre la Productividad en Colombia}
+\newcommand{\reportseriesdesc}{Evidencia para entender y fomentar la productividad}
+\newcommand{\reportnumber}{Informe 0X}
+\newcommand{\reporttitle}{Remuneración Laboral por Nivel Educativo en Colombia 2008--2025}
+\newcommand{\reportsubtitle}{Una lectura a partir de la GEIH}
+\newcommand{\reportauthorone}{Oliver Pardo}
+\newcommand{\reportauthoroneaffil}{Profesor asociado del Departamento de Administración, Pontificia Universidad Javeriana y Director del Centro Javeriano de Competitividad}
+\newcommand{\reportauthortwo}{Jorge Orozco}
+\newcommand{\reportauthortwoaffil}{Consultor de investigación del Centro Javeriano de Competitividad, Pontificia Universidad Javeriana}
+\renewcommand{\contentsname}{Tabla de contenido}
+
+\title{\reporttitle\\\reportsubtitle}
+\author{\reportauthorone \and \reportauthortwo}
+\date{\today}
+
+\begin{document}
+
+\begin{titlepage}
+\thispagestyle{empty}
+\vspace*{0.6cm}
+
+\begin{center}
+\includegraphics[width=0.58\textwidth]{logo_cjc_palatino_horizontal.png}
+\end{center}
+
+\vspace{1.5cm}
+
+\begin{center}
+{\Large\bfseries \reportseries\par}
+\vspace{0.15cm}
+{\large \reportseriesdesc\par}
+
+\vspace{1.4cm}
+
+{\large\bfseries \reportnumber\par}
+\vspace{0.45cm}
+{\Huge\bfseries \reporttitle\par}
+\vspace{0.35cm}
+{\Large \reportsubtitle\par}
+\vspace{0.65cm}
+{\large\bfseries \reportauthorone\par}
+{\normalsize \reportauthoroneaffil\par}
+\vspace{0.25cm}
+{\large\bfseries \reportauthortwo\par}
+{\normalsize \reportauthortwoaffil\par}
+\end{center}
+
+\vfill
+
+\begin{center}
+{\large \today\par}
+\end{center}
+
+\end{titlepage}
+
+\begin{mdframed}[
+  linewidth=1pt,
+  linecolor=gray!60,
+  backgroundcolor=gray!6,
+  innertopmargin=12pt,
+  innerbottommargin=12pt,
+  innerleftmargin=14pt,
+  innerrightmargin=14pt
+]
+\section*{Resumen ejecutivo}
+\addcontentsline{toc}{section}{Resumen ejecutivo}
+\textbf{Este informe analiza la evolución de la remuneración laboral por nivel educativo en Colombia entre 2008 y 2025.} El ejercicio usa los microdatos armonizados de la GEIH y clasifica a la población ocupada en tres grupos comparables a lo largo de todo el periodo: primaria o menos, secundaria y universitaria o superior.
+
+\textbf{La educación superior mantiene una ventaja clara en niveles de remuneración.} En 2025, la remuneración por hora de trabajadores con educación universitaria o superior fue de 17,2 miles de pesos de 2025, frente a 6,9 miles en secundaria y 5,4 miles en primaria o menos.
+
+\textbf{La brecha relativa se redujo, aunque no desapareció.} En 2008, la remuneración por hora de trabajadores con educación universitaria o superior era 3,68 veces la de trabajadores con primaria o menos; en 2025 fue 3,17 veces. La convergencia relativa ocurrió porque la remuneración por hora de primaria o menos creció más rápido que la de educación superior.
+
+\textbf{La fuerza laboral se volvió más educada.} La participación de trabajadores con educación universitaria o superior aumentó de 21,9\% a 33,7\%, mientras primaria o menos cayó de 36,0\% a 21,0\%. Este cambio de composición ayuda a explicar parte de la mejora agregada de las remuneraciones.
+
+\textbf{Desde 2021, la pregunta educativa permite mirar diferencias internas.} La sección final separa media académica y técnica, normalista, técnica profesional, tecnológica, universitaria, especialización, maestría y doctorado. Esa apertura muestra que la categoría de educación superior es heterogénea y que los posgrados ocupan la parte alta de la distribución de remuneración por hora.
+\end{mdframed}
+
+\newpage
+\tableofcontents
+\newpage
+
+\input{Paper/sections/CuerpoInformeRemuneracionEducacionGEIH}
+
+\end{document}
