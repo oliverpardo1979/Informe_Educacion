@@ -28,7 +28,7 @@ Universitaria o superior & 3,8 & 7,7 & 4,80\% & 22,8\% & 33,7\% & +10,9 \\
 \begin{tabular}{@{}p{4.1cm}rrrrr@{}}
 \toprule
 \multicolumn{6}{@{}l}{\textbf{Panel A. Remuneración mensual por trabajador (millones de pesos de 2025)}} \\
-Logro educativo & 2010 & 2025 & Crec. anual & Brecha 2010 & Brecha 2025 \\
+Logro educativo & 2010 & 2025 & Crec. anual & Brecha prom. 2010 & Brecha prom. 2025 \\
 \midrule
 Primaria o menos & 0,88 & 1,00 & 0,85\% & -41,9\% & -47,7\% \\
 Secundaria & 1,20 & 1,34 & 0,78\% & -20,9\% & -29,6\% \\
@@ -36,8 +36,8 @@ Universitaria o superior & 3,08 & 3,23 & 0,31\% & +104,0\% & +69,3\% \\
 \midrule
 \textbf{Total} & 1,51 & 1,91 & 1,56\% & 0,0\% & 0,0\% \\
 \addlinespace[0.7em]
-\multicolumn{6}{@{}l}{\textbf{Panel B. Remuneración por hora trabajada (miles de pesos de 2025)}} \\
-Logro educativo & 2010 & 2025 & Crec. anual & Brecha 2010 & Brecha 2025 \\
+\multicolumn{6}{@{}l}{\textbf{Panel B. Remuneración por hora trabajada (miles de pesos de 2025 por hora)}} \\
+Logro educativo & 2010 & 2025 & Crec. anual & Brecha prom. 2010 & Brecha prom. 2025 \\
 \midrule
 Primaria o menos & 4,3 & 5,4 & 1,48\% & -41,6\% & -46,0\% \\
 Secundaria & 5,7 & 6,9 & 1,31\% & -23,3\% & -31,0\% \\
@@ -46,7 +46,7 @@ Universitaria o superior & 15,9 & 17,2 & 0,50\% & +114,0\% & +70,8\% \\
 \textbf{Total} & 7,4 & 10,1 & 2,03\% & 0,0\% & 0,0\% \\
 \bottomrule
 \end{tabular}
-\caption*{\footnotesize Nota: La brecha prom muestra la diferencia porcentual entre la remuneración del grupo y el promedio agregado del mismo año. El crecimiento es anualizado para 2010--2025. Fuente: cálculos propios con GEIH del DANE.}
+\caption*{\footnotesize Nota: ``Brecha prom.'' muestra la diferencia porcentual entre la remuneración del grupo y el promedio agregado del mismo año. El crecimiento es anualizado para 2010--2025. La serie excluye 2020. Fuente: cálculos propios con GEIH del DANE.}
 \end{table}
 
 \begin{table}[H]
@@ -90,4 +90,31 @@ Logro educativo: Universitaria o superior & 1,9 & 74,3\% \\
 \bottomrule
 \end{tabular}
 \caption*{\footnotesize Nota: los aportes al cambio preservan el signo de cada contribución: valores positivos aumentan el cambio agregado y valores negativos lo reducen. Los porcentajes dividen cada factor por el cambio total del indicador correspondiente. Los factores de productividad corresponden a \(\bar{s}_g(r_{g,2025}-r_{g,2010})\); los factores de logro educativo corresponden a \(\bar{r}_g(s_{g,2025}-s_{g,2010})\). Las sumas pueden no coincidir por redondeo. Fuente: cálculos propios con GEIH del DANE.}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Composición de los ocupados por logro educativo, sexo y formalidad, 2010 y 2025}
+\label{tab:composicion_educacion_sexo_formalidad}
+\footnotesize
+\begin{tabular}{@{}p{4.2cm}rrrr@{}}
+\toprule
+\multicolumn{5}{@{}l}{\textbf{Panel A. Sexo}} \\
+Logro educativo & Hombre 2010 & Mujer 2010 & Hombre 2025 & Mujer 2025 \\
+\midrule
+Primaria o menos & 67,8\% & 32,2\% & 70,0\% & 30,0\% \\
+Secundaria & 59,7\% & 40,3\% & 61,7\% & 38,3\% \\
+Universitaria o superior & 48,5\% & 51,5\% & 47,9\% & 52,1\% \\
+\textbf{Total} & 60,1\% & 39,9\% & 58,8\% & 41,2\% \\
+\addlinespace[0.6em]
+\multicolumn{5}{@{}l}{\textbf{Panel B. Formalidad}} \\
+Logro educativo & Formal 2010 & Informal 2010 & Formal 2025 & Informal 2025 \\
+\midrule
+Primaria o menos & 11,5\% & 88,5\% & 13,0\% & 87,0\% \\
+Secundaria & 31,3\% & 68,7\% & 36,7\% & 63,3\% \\
+Universitaria o superior & 67,5\% & 32,5\% & 76,0\% & 24,0\% \\
+\textbf{Total} & 32,4\% & 67,6\% & 44,9\% & 55,1\% \\
+\bottomrule
+\end{tabular}
+\caption*{\footnotesize Nota: participaciones dentro de cada logro educativo, calculadas con factores de expansión sobre la misma submuestra usada para medir remuneración. El Panel B clasifica como formal a quienes cotizan a pensión e informal a quienes no cotizan; excluye observaciones sin clasificación formal/informal válida. Fuente: cálculos propios con GEIH del DANE.}
 \end{table}
