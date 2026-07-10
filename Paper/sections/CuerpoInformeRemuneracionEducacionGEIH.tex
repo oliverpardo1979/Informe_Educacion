@@ -15,7 +15,7 @@
 
 \textbf{Los resultados muestran que la remuneración promedio por trabajador aumentó más por el mayor logro educativo que por una mayor productividad de cada logro educativo.} Lograr una educación universitaria o superior sigue siendo un camino para alcanzar una mejor remuneración, pero la agenda de productividad no puede depender solo de que más personas suban en la escala educativa. También debe buscar que la recuperación reciente de la remuneración de quienes alcanzan educación universitaria o superior sea sostenible en el tiempo, y que los empleos disponibles para los demás logros educativos mejoren su productividad y remuneración.
 
-\textbf{El informe está organizado en siete secciones, incluyendo esta introducción.} La Sección \ref{sec:metodologia} describe la construcción de las medidas de remuneración y la descomposición del crecimiento de la remuneración mensual por trabajador y de la remuneración por hora trabajada. La Sección \ref{sec:grupos_comparables} presenta la dinámica de la remuneración entre 2010 y 2025 con tres logros educativos comparables: primaria o menos, secundaria y universitaria o superior. La Sección \ref{sec:formalidad_educacion} separa la remuneración de cada logro educativo entre trabajadores formales e informales. La Sección \ref{sec:cohortes_edad} compara la remuneración por grupo de edad dentro de cada logro educativo. La Sección \ref{sec:categorias_detalladas} aprovecha la apertura de la pregunta educativa desde 2021 para mirar credenciales más desagregadas y mostrar qué se oculta al agrupar toda la educación superior en una sola categoría. Finalmente, la Sección \ref{sec:conclusiones} resume los retos de la educación dentro de la agenda nacional de productividad.
+\textbf{El informe está organizado en siete secciones, incluyendo esta introducción.} La Sección \ref{sec:metodologia} describe la construcción de las medidas de remuneración y la descomposición del crecimiento de la remuneración mensual por trabajador y de la remuneración por hora trabajada. La Sección \ref{sec:grupos_comparables} presenta la dinámica de la remuneración entre 2010 y 2025 con tres logros educativos comparables: primaria o menos, secundaria y universitaria o superior. La Sección \ref{sec:formalidad_educacion} separa la remuneración de cada logro educativo entre trabajadores formales e informales. La Sección \ref{sec:cohortes_edad} compara la remuneración por grupo de edad y por cohorte de nacimiento dentro de cada logro educativo. La Sección \ref{sec:categorias_detalladas} aprovecha la apertura de la pregunta educativa desde 2021 para mirar credenciales más desagregadas y mostrar qué se oculta al agrupar toda la educación superior en una sola categoría. Finalmente, la Sección \ref{sec:conclusiones} resume los retos de la educación dentro de la agenda nacional de productividad.
 
 \section{Metodología}\label{sec:metodologia}
 
@@ -43,7 +43,7 @@ El primer término mide cuánto cambia la remuneración promedio por variaciones
 
 \textbf{La clasificación comparable reduce el logro educativo a tres grupos.} Primaria o menos agrupa ninguno, preescolar y básica primaria; secundaria agrupa básica secundaria y media; universitaria o superior agrupa la educación superior. Esta agregación permite comparar toda la serie, incluso antes de que la pregunta educativa se abriera en categorías más finas.
 
-\textbf{La comparación por grupo de edad cruza esos tres logros educativos con cinco rangos etarios.} Los rangos son 15--24, 25--34, 35--44, 45--54 y 55 años o más. El ejercicio compara a personas del mismo rango de edad observadas en 2010 y 2025. No sigue a una misma cohorte de nacimiento a lo largo del tiempo, de modo que los resultados combinan diferencias de edad, composición y condiciones del mercado laboral de cada año.
+\textbf{La comparación por edad se presenta de dos maneras.} Primero se cruzan los tres logros educativos con cinco rangos etarios: 15--24, 25--34, 35--44, 45--54 y 55 años o más. Ese ejercicio compara a personas del mismo rango de edad observadas en 2010 y 2025. Luego se construyen cohortes de nacimiento aproximadas como año de encuesta menos edad reportada. En ese segundo ejercicio se comparan las cohortes que aparecen en ambos años dentro de los rangos solicitados. Como la GEIH no sigue individuos, la comparación debe leerse como una comparación de cohortes observadas en dos cortes transversales.
 
 \textbf{La clasificación detallada se usa desde 2021.} Para esa sección se parte de la tabla agregada por logro educativo generada por el pipeline de la GEIH. El archivo conserva las categorías abiertas de la pregunta educativa y cubre prácticamente la totalidad de los ocupados con ingreso válido en 2021--2025. Como esa tabla estaba en pesos corrientes, se deflactó con el mismo IPC usado en la base de personas. La fuente detallada contiene ingresos horarios y ocupados; para aproximar la remuneración mensual por trabajador se combina el ingreso por hora de cada categoría con las horas promedio del grupo comparable al que pertenece.
 
@@ -129,13 +129,27 @@ En este grupo, el promedio de 2010--2025 oculta dos tramos distintos: entre 2010
 
 \textbf{La diferencia entre formales e informales aparece tanto por trabajador como por hora trabajada.} En 2025, la remuneración por hora de los trabajadores formales fue de 8,1 miles de pesos en primaria o menos, 8,7 miles en secundaria y 19,2 miles en educación universitaria o superior. Entre los informales, la remuneración por hora fue de 4,9 miles de pesos, 5,8 miles y 8,7 miles. La comparación sugiere que la remuneración no depende solo del logro educativo: dentro de cada logro, la formalidad también está asociada con remuneraciones más altas.
 
-\section{Remuneración por grupo de edad y logro educativo}\label{sec:cohortes_edad}
+\section{Remuneración por edad, cohorte y logro educativo}\label{sec:cohortes_edad}
 
 \textbf{La comparación por grupos de edad muestra que el crecimiento de la remuneración no fue uniforme dentro de cada logro educativo.} El Cuadro \ref{tab:remuneracion_educacion_cohorte} compara la remuneración de cada grupo de edad en 2010 y 2025, para los tres logros educativos comparables. En primaria o menos, la remuneración mensual creció en todos los grupos, con aumentos anuales entre 0,52\% para 55 años o más y 1,80\% para 15 a 24 años. En secundaria ocurre algo parecido hasta los 54 años, pero el grupo de 55 años o más cae 0,93\% anual.
 
 \input{Paper/sections/remuneracion_educacion_cohorte_table}
 
 \textbf{En educación universitaria o superior, la comparación por edad matiza el promedio agregado.} Entre 2010 y 2025, la remuneración mensual de 15 a 24 años aumentó 1,23\% anual, mientras la de 25 a 44 años cambió poco y la de 45 años o más cayó. La remuneración por hora muestra el mismo patrón: aumentó para los menores de 45 años y cayó para los mayores. Esta lectura no implica que una persona con educación superior pierda remuneración al envejecer. Lo que muestra es que los trabajadores de la misma edad observados en 2025 no tuvieron, en promedio, la misma remuneración que los trabajadores de esa edad observados en 2010.
+
+\textbf{La comparación por cohortes de nacimiento agrega una lectura de ciclo de vida.} El Cuadro \ref{tab:remuneracion_educacion_cohortes_nacimiento} compara tres cohortes que aparecen tanto en 2010 como en 2025: nacidos entre 1985 y 1989, 1980 y 1984, y 1975 y 1979. Para el total, la cohorte 1985--1990 pasó de 1,16 a 2,26 millones de pesos mensuales de 2025, con crecimiento anual de 4,54\%. La cohorte 1980--1985 pasó de 1,52 a 2,22 millones, con crecimiento anual de 2,58\%. La cohorte 1975--1980 pasó de 1,67 a 2,17 millones, con crecimiento anual de 1,77\%.
+
+\input{Paper/sections/remuneracion_educacion_cohortes_nacimiento_table}
+
+\textbf{La Figura \ref{fig:remuneracion_educacion_cohortes_nacimiento} resume la remuneración mensual por trabajador para las cohortes comparables.} La figura muestra que los aumentos son mayores para la cohorte más joven y que la pendiente es especialmente pronunciada en educación universitaria o superior. En esa cohorte, los ocupados con educación universitaria o superior pasaron de 1,63 a 3,69 millones de pesos mensuales de 2025. En las filas por logro educativo, la comparación no debe leerse como seguimiento de las mismas personas dentro de un mismo logro, porque algunas personas pueden completar más educación entre 2010 y 2025.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.98\textwidth]{Paper/figures/fig_remuneracion_educacion_cohortes_nacimiento.png}
+  \caption{Remuneración mensual por cohorte de nacimiento y logro educativo, 2010 y 2025}
+  \label{fig:remuneracion_educacion_cohortes_nacimiento}
+  \caption*{\footnotesize Nota: millones de pesos mensuales de 2025 por trabajador. Cada línea conecta la misma cohorte de nacimiento observada en 2010 y 2025. Fuente: cálculos propios con GEIH del DANE.}
+\end{figure}
 
 \section{Desagregación de los logros educativos}\label{sec:categorias_detalladas}
 
@@ -203,7 +217,7 @@ Doctorado & Posgrado doctoral. \\
 
 \textbf{La formalidad diferencia la remuneración dentro de cada logro educativo.} Los ocupados formales ganan más que los informales en las dos medidas de remuneración y en los tres logros educativos comparables. Esto no convierte la formalidad en una explicación causal de las brechas, pero sí muestra que la forma de inserción laboral importa junto con el logro educativo.
 
-\textbf{La comparación por edad advierte que el promedio de cada logro educativo puede ocultar cambios internos.} En educación universitaria o superior, los grupos jóvenes tuvieron mayores remuneraciones reales en 2025 que los grupos de la misma edad en 2010, mientras los grupos de 45 años o más tuvieron remuneraciones menores. La evidencia merece seguimiento porque puede reflejar cambios en la composición interna de la educación superior, en las ocupaciones de destino o en la demanda relativa por experiencia.
+\textbf{La comparación por edad y cohorte advierte que el promedio de cada logro educativo puede ocultar cambios internos.} En educación universitaria o superior, los grupos jóvenes tuvieron mayores remuneraciones reales en 2025 que los grupos de la misma edad en 2010, mientras los grupos de 45 años o más tuvieron remuneraciones menores. Al seguir cohortes de nacimiento comparables, la cohorte más joven muestra el mayor aumento de remuneración. La evidencia merece seguimiento porque puede reflejar cambios en la composición interna de la educación superior, en las ocupaciones de destino o en la demanda relativa por experiencia.
 
 \textbf{La apertura de la pregunta educativa permite mirar mejor la heterogeneidad reciente.} Desde 2021, las categorías detalladas muestran diferencias entre técnica profesional, tecnológica, universitaria y posgrados, así como entre media académica y media técnica. Esa información puede aprovecharse en informes posteriores para conectar credenciales educativas con ocupaciones, sectores y calidad del empleo.
 
