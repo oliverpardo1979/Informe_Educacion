@@ -22,6 +22,8 @@ YEARS = [2010, 2015, 2021, 2025]
 MONTHS_PER_WEEK = 52.0 / 12.0
 COHORT_WIDTH = 10
 COHORT_STARTS = list(range(1960, 2010, COHORT_WIDTH))
+AGE_BIN_WIDTH = 10
+AGE_MAX_LABEL = 64
 
 EDUCATION_ORDER = {
     "Primaria o menos": 1,
@@ -114,8 +116,28 @@ def weighted_average(values: pd.Series, weights: pd.Series) -> float:
     return float((values * weights).sum() / weights.sum())
 
 
-def age_interval_start(age: float) -> int:
-    return int(math.floor(age / 5.0) * 5)
+def age_interval_start(age: float, start: int = 15) -> int:
+    return start + int(math.floor((age - start) / AGE_BIN_WIDTH) * AGE_BIN_WIDTH)
+
+
+def age_interval_end(start: int) -> int:
+    return min(start + AGE_BIN_WIDTH - 1, AGE_MAX_LABEL)
+
+
+def age_interval_label(start: int) -> str:
+    return f"{start}--{age_interval_end(start)}"
+
+
+def age_interval_center(start: int) -> float:
+    return (start + age_interval_end(start)) / 2
+
+
+def add_age_axis_columns(data: pd.DataFrame, start: int) -> pd.DataFrame:
+    data = data.copy()
+    data["edad_eje_inicio"] = data["edad_media"].map(lambda value: age_interval_start(value, start))
+    data["edad_eje"] = data["edad_eje_inicio"].map(age_interval_label)
+    data["edad_eje_centro"] = data["edad_eje_inicio"].map(age_interval_center)
+    return data
 
 
 def build_microdata() -> pd.DataFrame:
@@ -162,8 +184,9 @@ def aggregate(data: pd.DataFrame, by: list[str]) -> pd.DataFrame:
         row.update(
             {
                 "edad_media": edad_media,
-                "edad_intervalo": f"{edad_inicio}--{edad_inicio + 4}",
+                "edad_intervalo": age_interval_label(edad_inicio),
                 "edad_intervalo_inicio": edad_inicio,
+                "edad_intervalo_centro": age_interval_center(edad_inicio),
                 "ocupados": ocupados,
                 "rem_trabajador": total_rem / ocupados,
                 "rem_hora": total_rem / total_hours,
@@ -234,7 +257,7 @@ def line_points(
 ) -> list[tuple[float, float]]:
     points = []
     for row in data.sort_values("anio").itertuples(index=False):
-        x = left + (row.edad_media - x_min) / (x_max - x_min) * (right - left)
+        x = left + (row.edad_eje_centro - x_min) / (x_max - x_min) * (right - left)
         y_value = getattr(row, metric) / scale
         y = bottom - (y_value - y_min) / (y_max - y_min) * (bottom - top)
         points.append((x, y))
@@ -250,6 +273,7 @@ def draw_axes(
     y_max: float,
     y_step: float,
     y_digits: int,
+    x_label_max: int = AGE_MAX_LABEL,
 ) -> None:
     left, top, right, bottom = bounds
     tick = y_min
@@ -259,11 +283,11 @@ def draw_axes(
         draw_text(draw, (left - 14, y), fmt_decimal(tick, y_digits), "#555555", 22, anchor="rm")
         tick += y_step
 
-    first_tick = int(math.ceil(x_min / 5) * 5)
-    for age in range(first_tick, int(x_max) + 1, 5):
-        x = left + (age - x_min) / (x_max - x_min) * (right - left)
+    for age in range(int(x_min), x_label_max + 1, AGE_BIN_WIDTH):
+        center = age_interval_center(age)
+        x = left + (center - x_min) / (x_max - x_min) * (right - left)
         draw.line((x, bottom, x, bottom + 8), fill="#333333", width=2)
-        draw_text(draw, (x, bottom + 20), f"{age}--{age + 4}", "#555555", 20, anchor="mt")
+        draw_text(draw, (x, bottom + 20), age_interval_label(age), "#555555", 20, anchor="mt")
 
     draw.line((left, bottom, right, bottom), fill="#333333", width=2)
     draw.line((left, top, left, bottom), fill="#333333", width=2)
@@ -299,11 +323,11 @@ def draw_total_figure(
     output_file: str,
 ) -> None:
     FIG_DIR.mkdir(parents=True, exist_ok=True)
-    plot_data = data.copy()
+    plot_data = add_age_axis_columns(data, 15)
     plot_data["valor"] = plot_data[metric] / scale
     y_min, y_max, y_step = axis_bounds(plot_data["valor"])
-    x_min = max(15, int(plot_data["edad_intervalo_inicio"].min()))
-    x_max = min(64, int(plot_data["edad_intervalo_inicio"].max()) + 4)
+    x_min = 15
+    x_max = 65
     cohorts = list(plot_data.sort_values("orden_cohorte")["cohorte"].drop_duplicates())
 
     width, height = 1800, 1080
@@ -313,7 +337,7 @@ def draw_total_figure(
 
     draw_text(draw, (80, 48), title, "#111111", 44, True)
     draw_text(draw, (80, 102), subtitle, "#444444", 28)
-    draw_text(draw, (80, 145), "Eje horizontal: edad promedio observada de la cohorte", "#555555", 24)
+    draw_text(draw, (80, 145), "Eje horizontal: tramos decenales de edad", "#555555", 24)
 
     draw_axes(draw, bounds, x_min, x_max, y_min, y_max, y_step, y_digits)
 
@@ -338,8 +362,8 @@ def draw_total_figure(
 
 def education_axis_limits(group: str) -> tuple[int, int]:
     if group == "Universitaria o superior":
-        return 20, 64
-    return 15, 64
+        return 20, 65
+    return 15, 65
 
 
 def draw_single_education_figure(
@@ -356,9 +380,10 @@ def draw_single_education_figure(
     x_min, x_max = education_axis_limits(group)
     plot_data = data[
         (data["grupo_educativo"] == group)
-        & (data["edad_intervalo_inicio"] >= x_min)
-        & (data["edad_intervalo_inicio"] <= 60)
+        & (data["edad_media"] >= x_min)
+        & (data["edad_media"] < x_max)
     ].copy()
+    plot_data = add_age_axis_columns(plot_data, x_min)
     plot_data["valor"] = plot_data[metric] / scale
     cohort_counts = plot_data.groupby("cohorte")["anio"].nunique()
     cohorts = list(
@@ -379,9 +404,9 @@ def draw_single_education_figure(
     draw_text(draw, (80, 45), f"{title_prefix}: {group}", "#111111", 43, True)
     draw_text(draw, (80, 97), subtitle, "#444444", 27)
     if group == "Universitaria o superior":
-        range_text = "Eje horizontal: edad promedio observada, de 20--24 a 60--64 años"
+        range_text = "Eje horizontal: tramos decenales de edad, de 20--29 a 60--64 años"
     else:
-        range_text = "Eje horizontal: edad promedio observada, de 15--19 a 60--64 años"
+        range_text = "Eje horizontal: tramos decenales de edad, de 15--24 a 55--64 años"
     draw_text(draw, (80, 137), range_text, "#555555", 23)
     draw.line((80, 170, 1660, 170), fill=EDUCATION_COLORS[group], width=5)
 
