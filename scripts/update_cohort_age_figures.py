@@ -34,6 +34,12 @@ EDUCATION_COLORS = {
     "Universitaria o superior": "#009e73",
 }
 
+EDUCATION_SLUGS = {
+    "Primaria o menos": "primaria",
+    "Secundaria": "secundaria",
+    "Universitaria o superior": "superior",
+}
+
 COHORT_COLORS = {
     "1960--1965": "#6c757d",
     "1965--1970": "#a05195",
@@ -333,62 +339,96 @@ def draw_total_figure(
     image.save(FIG_DIR / output_file, quality=95)
 
 
-def draw_education_figure(
+def education_axis_limits(group: str) -> tuple[int, int]:
+    if group == "Universitaria o superior":
+        return 20, 64
+    return 15, 64
+
+
+def draw_single_education_figure(
     data: pd.DataFrame,
     metric: str,
     scale: float,
     y_digits: int,
-    title: str,
+    group: str,
+    title_prefix: str,
     subtitle: str,
     output_file: str,
 ) -> None:
     FIG_DIR.mkdir(parents=True, exist_ok=True)
-    plot_data = data.copy()
+    x_min, x_max = education_axis_limits(group)
+    plot_data = data[
+        (data["grupo_educativo"] == group)
+        & (data["edad_media_intervalo"] >= x_min)
+        & (data["edad_media_intervalo"] < 65)
+    ].copy()
     plot_data["valor"] = plot_data[metric] / scale
-    cohorts = list(plot_data.sort_values("orden_cohorte")["cohorte"].drop_duplicates())
-    x_min = math.floor(float(plot_data["edad_media_intervalo"].min()) / 5.0) * 5
-    x_min = max(15, x_min)
-    x_max = math.ceil(float(plot_data["edad_media_intervalo"].max()) / 5.0) * 5
+    cohort_counts = plot_data.groupby("cohorte")["anio"].nunique()
+    cohorts = list(
+        plot_data[
+            plot_data["cohorte"].isin(set(cohort_counts[cohort_counts >= 2].index))
+        ]
+        .sort_values("orden_cohorte")["cohorte"]
+        .drop_duplicates()
+    )
+    plot_data = plot_data[plot_data["cohorte"].isin(set(cohorts))].copy()
+    y_min, y_max, y_step = axis_bounds(plot_data["valor"])
 
-    width, height = 1850, 1770
+    width, height = 1800, 1080
     image = Image.new("RGB", (width, height), "white")
     draw = ImageDraw.Draw(image)
+    bounds = (150, 210, 1660, 750)
 
-    draw_text(draw, (80, 45), title, "#111111", 43, True)
+    draw_text(draw, (80, 45), f"{title_prefix}: {group}", "#111111", 43, True)
     draw_text(draw, (80, 97), subtitle, "#444444", 27)
-    draw_text(draw, (80, 137), "Cada panel usa su propia escala vertical.", "#555555", 23)
+    if group == "Universitaria o superior":
+        range_text = "Eje horizontal: de 20--24 a 60--64 años"
+    else:
+        range_text = "Eje horizontal: de 15--19 a 60--64 años"
+    draw_text(draw, (80, 137), range_text, "#555555", 23)
+    draw.line((80, 170, 1660, 170), fill=EDUCATION_COLORS[group], width=5)
 
-    panel_bounds = [
-        (150, 235, 1665, 565),
-        (150, 660, 1665, 990),
-        (150, 1085, 1665, 1415),
-    ]
+    draw_axes(draw, bounds, x_min, x_max, y_min, y_max, y_step, y_digits)
 
-    for group, bounds in zip(sorted(EDUCATION_ORDER, key=EDUCATION_ORDER.get), panel_bounds):
-        subset_group = plot_data[plot_data["grupo_educativo"] == group].copy()
-        y_min, y_max, y_step = axis_bounds(subset_group["valor"])
-        left, top, right, bottom = bounds
-        draw_text(draw, (left, top - 42), group, EDUCATION_COLORS[group], 27, True)
-        draw_axes(draw, bounds, x_min, x_max, y_min, y_max, y_step, y_digits)
+    left, top, right, bottom = bounds
+    for cohort in cohorts:
+        subset = plot_data[plot_data["cohorte"] == cohort].copy()
+        points = line_points(subset, left, right, top, bottom, metric, scale, x_min, x_max, y_min, y_max)
+        color = COHORT_COLORS[cohort]
+        draw.line(points, fill=color, width=5)
+        for row, (x, y) in zip(subset.sort_values("anio").itertuples(index=False), points):
+            if row.anio == 2021:
+                draw.ellipse((x - 7, y - 7, x + 7, y + 7), fill="white", outline=color, width=3)
+            else:
+                draw.ellipse((x - 6, y - 6, x + 6, y + 6), fill=color)
 
-        for cohort in cohorts:
-            subset = subset_group[subset_group["cohorte"] == cohort].copy()
-            if subset["anio"].nunique() < 2:
-                continue
-            left, top, right, bottom = bounds
-            points = line_points(subset, left, right, top, bottom, metric, scale, x_min, x_max, y_min, y_max)
-            color = COHORT_COLORS[cohort]
-            draw.line(points, fill=color, width=4)
-            for row, (x, y) in zip(subset.sort_values("anio").itertuples(index=False), points):
-                if row.anio == 2021:
-                    draw.ellipse((x - 6, y - 6, x + 6, y + 6), fill="white", outline=color, width=3)
-                else:
-                    draw.ellipse((x - 5, y - 5, x + 5, y + 5), fill=color)
-
-    draw_legend(draw, cohorts, 150, 1480, 440, 38, 3)
-    draw_text(draw, (80, 1665), "Nota: 2021 se usa porque la base procesada no contiene 2020.", "#555555", 22)
-    draw_text(draw, (80, 1694), "Fuente: cálculos propios con GEIH del DANE.", "#555555", 22)
+    draw_legend(draw, cohorts, 150, 835, 440, 42, 3)
+    draw_text(draw, (80, 1010), "Nota: 2021 se usa porque la base procesada no contiene 2020.", "#555555", 23)
+    draw_text(draw, (80, 1040), "Fuente: cálculos propios con GEIH del DANE.", "#555555", 23)
     image.save(FIG_DIR / output_file, quality=95)
+
+
+def draw_education_figures(
+    data: pd.DataFrame,
+    metric: str,
+    scale: float,
+    y_digits: int,
+    title_prefix: str,
+    subtitle: str,
+    output_prefix: str,
+) -> None:
+    for group in sorted(EDUCATION_ORDER, key=EDUCATION_ORDER.get):
+        slug = EDUCATION_SLUGS[group]
+        draw_single_education_figure(
+            data,
+            metric,
+            scale,
+            y_digits,
+            group,
+            title_prefix,
+            subtitle,
+            f"{output_prefix}_{slug}.png",
+        )
 
 
 def main() -> None:
@@ -417,23 +457,23 @@ def main() -> None:
         "Cohortes quinquenales con al menos dos años observados. Miles de pesos de 2025 por hora",
         "fig_remuneracion_cohortes_edad_hora.png",
     )
-    draw_education_figure(
+    draw_education_figures(
         educ,
         "rem_trabajador",
         1e6,
         1,
-        "Remuneración mensual por edad, cohorte y logro educativo",
+        "Remuneración mensual por edad y cohorte",
         "Cohortes quinquenales con al menos dos años observados. Millones de pesos mensuales de 2025",
-        "fig_remuneracion_cohortes_edad_educacion_trabajador.png",
+        "fig_remuneracion_cohortes_edad_educacion_trabajador",
     )
-    draw_education_figure(
+    draw_education_figures(
         educ,
         "rem_hora",
         1e3,
         1,
-        "Remuneración por hora por edad, cohorte y logro educativo",
+        "Remuneración por hora por edad y cohorte",
         "Cohortes quinquenales con al menos dos años observados. Miles de pesos de 2025 por hora",
-        "fig_remuneracion_cohortes_edad_educacion_hora.png",
+        "fig_remuneracion_cohortes_edad_educacion_hora",
     )
 
 
