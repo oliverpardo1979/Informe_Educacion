@@ -20,7 +20,8 @@ FIG_DIR = REPO_ROOT / "Paper" / "figures"
 
 YEARS = [2010, 2015, 2021, 2025]
 MONTHS_PER_WEEK = 52.0 / 12.0
-COHORT_STARTS = list(range(1960, 2005, 5))
+COHORT_WIDTH = 10
+COHORT_STARTS = list(range(1960, 2010, COHORT_WIDTH))
 
 EDUCATION_ORDER = {
     "Primaria o menos": 1,
@@ -41,15 +42,11 @@ EDUCATION_SLUGS = {
 }
 
 COHORT_COLORS = {
-    "1960--1965": "#6c757d",
-    "1965--1970": "#a05195",
-    "1970--1975": "#d45087",
-    "1975--1980": "#8a3ffc",
-    "1980--1985": "#009e73",
-    "1985--1990": "#0072b2",
-    "1990--1995": "#e69f00",
-    "1995--2000": "#cc79a7",
-    "2000--2005": "#56b4e9",
+    "1960--1970": "#6c757d",
+    "1970--1980": "#d45087",
+    "1980--1990": "#009e73",
+    "1990--2000": "#e69f00",
+    "2000--2010": "#56b4e9",
 }
 
 
@@ -108,8 +105,8 @@ def cohort_label(birth_year: float) -> str | None:
     if pd.isna(birth_year):
         return None
     for start in COHORT_STARTS:
-        if start <= birth_year < start + 5:
-            return f"{start}--{start + 5}"
+        if start <= birth_year < start + COHORT_WIDTH:
+            return f"{start}--{start + COHORT_WIDTH}"
     return None
 
 
@@ -142,7 +139,7 @@ def build_microdata() -> pd.DataFrame:
     df["cohorte"] = df["birth_year"].map(cohort_label)
     df = df[df["cohorte"].notna()].copy()
     df["orden_cohorte"] = df["cohorte"].map(
-        {f"{start}--{start + 5}": idx for idx, start in enumerate(COHORT_STARTS)}
+        {f"{start}--{start + COHORT_WIDTH}": idx for idx, start in enumerate(COHORT_STARTS)}
     )
     df["orden_educ"] = df["grupo_educativo"].map(EDUCATION_ORDER)
     df["rem_mensual"] = df["ingreso_hora_real"] * df["horas"] * MONTHS_PER_WEEK
@@ -164,7 +161,7 @@ def aggregate(data: pd.DataFrame, by: list[str]) -> pd.DataFrame:
         edad_inicio = age_interval_start(edad_media)
         row.update(
             {
-                "edad_media_intervalo": edad_media,
+                "edad_media": edad_media,
                 "edad_intervalo": f"{edad_inicio}--{edad_inicio + 4}",
                 "edad_intervalo_inicio": edad_inicio,
                 "ocupados": ocupados,
@@ -237,7 +234,7 @@ def line_points(
 ) -> list[tuple[float, float]]:
     points = []
     for row in data.sort_values("anio").itertuples(index=False):
-        x = left + (row.edad_intervalo_inicio - x_min) / (x_max - x_min) * (right - left)
+        x = left + (row.edad_media - x_min) / (x_max - x_min) * (right - left)
         y_value = getattr(row, metric) / scale
         y = bottom - (y_value - y_min) / (y_max - y_min) * (bottom - top)
         points.append((x, y))
@@ -316,7 +313,7 @@ def draw_total_figure(
 
     draw_text(draw, (80, 48), title, "#111111", 44, True)
     draw_text(draw, (80, 102), subtitle, "#444444", 28)
-    draw_text(draw, (80, 145), "Eje horizontal: intervalos quinquenales de edad", "#555555", 24)
+    draw_text(draw, (80, 145), "Eje horizontal: edad promedio observada de la cohorte", "#555555", 24)
 
     draw_axes(draw, bounds, x_min, x_max, y_min, y_max, y_step, y_digits)
 
@@ -382,9 +379,9 @@ def draw_single_education_figure(
     draw_text(draw, (80, 45), f"{title_prefix}: {group}", "#111111", 43, True)
     draw_text(draw, (80, 97), subtitle, "#444444", 27)
     if group == "Universitaria o superior":
-        range_text = "Eje horizontal: de 20--24 a 60--64 años"
+        range_text = "Eje horizontal: edad promedio observada, de 20--24 a 60--64 años"
     else:
-        range_text = "Eje horizontal: de 15--19 a 60--64 años"
+        range_text = "Eje horizontal: edad promedio observada, de 15--19 a 60--64 años"
     draw_text(draw, (80, 137), range_text, "#555555", 23)
     draw.line((80, 170, 1660, 170), fill=EDUCATION_COLORS[group], width=5)
 
@@ -445,7 +442,7 @@ def main() -> None:
         1e6,
         1,
         "Remuneración mensual por edad y cohorte de nacimiento",
-        "Cohortes quinquenales con al menos dos años observados. Millones de pesos mensuales de 2025",
+        "Cohortes decenales con al menos dos años observados. Millones de pesos mensuales de 2025",
         "fig_remuneracion_cohortes_edad_trabajador.png",
     )
     draw_total_figure(
@@ -454,7 +451,7 @@ def main() -> None:
         1e3,
         1,
         "Remuneración por hora por edad y cohorte de nacimiento",
-        "Cohortes quinquenales con al menos dos años observados. Miles de pesos de 2025 por hora",
+        "Cohortes decenales con al menos dos años observados. Miles de pesos de 2025 por hora",
         "fig_remuneracion_cohortes_edad_hora.png",
     )
     draw_education_figures(
@@ -463,7 +460,7 @@ def main() -> None:
         1e6,
         1,
         "Remuneración mensual por edad y cohorte",
-        "Cohortes quinquenales con al menos dos años observados. Millones de pesos mensuales de 2025",
+        "Cohortes decenales con al menos dos años observados. Millones de pesos mensuales de 2025",
         "fig_remuneracion_cohortes_edad_educacion_trabajador",
     )
     draw_education_figures(
@@ -472,7 +469,7 @@ def main() -> None:
         1e3,
         1,
         "Remuneración por hora por edad y cohorte",
-        "Cohortes quinquenales con al menos dos años observados. Miles de pesos de 2025 por hora",
+        "Cohortes decenales con al menos dos años observados. Miles de pesos de 2025 por hora",
         "fig_remuneracion_cohortes_edad_educacion_hora",
     )
 
