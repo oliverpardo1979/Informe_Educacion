@@ -117,9 +117,8 @@ def weighted_average(values: pd.Series, weights: pd.Series) -> float:
     return float((values * weights).sum() / weights.sum())
 
 
-def age_interval_label(age: float) -> str:
-    lower = int(math.floor(age / 5.0) * 5)
-    return f"{lower}--{lower + 4}"
+def age_interval_start(age: float) -> int:
+    return int(math.floor(age / 5.0) * 5)
 
 
 def build_microdata() -> pd.DataFrame:
@@ -162,10 +161,12 @@ def aggregate(data: pd.DataFrame, by: list[str]) -> pd.DataFrame:
         total_hours = (group["horas_mensuales"] * peso).sum()
         ocupados = peso.sum()
         edad_media = weighted_average(group["edad"], peso)
+        edad_inicio = age_interval_start(edad_media)
         row.update(
             {
                 "edad_media_intervalo": edad_media,
-                "edad_intervalo": age_interval_label(edad_media),
+                "edad_intervalo": f"{edad_inicio}--{edad_inicio + 4}",
+                "edad_intervalo_inicio": edad_inicio,
                 "ocupados": ocupados,
                 "rem_trabajador": total_rem / ocupados,
                 "rem_hora": total_rem / total_hours,
@@ -236,7 +237,7 @@ def line_points(
 ) -> list[tuple[float, float]]:
     points = []
     for row in data.sort_values("anio").itertuples(index=False):
-        x = left + (row.edad_media_intervalo - x_min) / (x_max - x_min) * (right - left)
+        x = left + (row.edad_intervalo_inicio - x_min) / (x_max - x_min) * (right - left)
         y_value = getattr(row, metric) / scale
         y = bottom - (y_value - y_min) / (y_max - y_min) * (bottom - top)
         points.append((x, y))
@@ -304,9 +305,8 @@ def draw_total_figure(
     plot_data = data.copy()
     plot_data["valor"] = plot_data[metric] / scale
     y_min, y_max, y_step = axis_bounds(plot_data["valor"])
-    x_min = math.floor(float(plot_data["edad_media_intervalo"].min()) / 5.0) * 5
-    x_min = max(15, x_min)
-    x_max = math.ceil(float(plot_data["edad_media_intervalo"].max()) / 5.0) * 5
+    x_min = max(15, int(plot_data["edad_intervalo_inicio"].min()))
+    x_max = min(64, int(plot_data["edad_intervalo_inicio"].max()) + 4)
     cohorts = list(plot_data.sort_values("orden_cohorte")["cohorte"].drop_duplicates())
 
     width, height = 1800, 1080
@@ -316,7 +316,7 @@ def draw_total_figure(
 
     draw_text(draw, (80, 48), title, "#111111", 44, True)
     draw_text(draw, (80, 102), subtitle, "#444444", 28)
-    draw_text(draw, (80, 145), "Eje horizontal: edad promedio de la cohorte en intervalos de cinco años", "#555555", 24)
+    draw_text(draw, (80, 145), "Eje horizontal: intervalos quinquenales de edad", "#555555", 24)
 
     draw_axes(draw, bounds, x_min, x_max, y_min, y_max, y_step, y_digits)
 
@@ -359,8 +359,8 @@ def draw_single_education_figure(
     x_min, x_max = education_axis_limits(group)
     plot_data = data[
         (data["grupo_educativo"] == group)
-        & (data["edad_media_intervalo"] >= x_min)
-        & (data["edad_media_intervalo"] < 65)
+        & (data["edad_intervalo_inicio"] >= x_min)
+        & (data["edad_intervalo_inicio"] <= 60)
     ].copy()
     plot_data["valor"] = plot_data[metric] / scale
     cohort_counts = plot_data.groupby("cohorte")["anio"].nunique()
