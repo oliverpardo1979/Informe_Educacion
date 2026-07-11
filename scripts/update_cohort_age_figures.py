@@ -140,6 +140,12 @@ def add_age_axis_columns(data: pd.DataFrame, start: int) -> pd.DataFrame:
     return data
 
 
+def keep_cohorts_with_min_realizations(data: pd.DataFrame, minimum: int = 2) -> pd.DataFrame:
+    counts = data.groupby("cohorte")["anio"].nunique()
+    keep = set(counts[counts >= minimum].index)
+    return data[data["cohorte"].isin(keep)].copy()
+
+
 def build_microdata() -> pd.DataFrame:
     columns = ["anio", "edad", "educ_hom_cod", "fex", "horas", "ingreso_hora_real"]
     df = pd.read_stata(DATA_PATH, columns=columns)
@@ -211,9 +217,7 @@ def build_series() -> tuple[pd.DataFrame, pd.DataFrame]:
 
 
 def keep_observed_cohorts(data: pd.DataFrame) -> pd.DataFrame:
-    counts = data.groupby("cohorte")["anio"].nunique()
-    keep = set(counts[counts >= 2].index)
-    return data[data["cohorte"].isin(keep)].copy()
+    return keep_cohorts_with_min_realizations(data)
 
 
 def nice_step(span: float, target_ticks: int = 6) -> float:
@@ -324,6 +328,7 @@ def draw_total_figure(
 ) -> None:
     FIG_DIR.mkdir(parents=True, exist_ok=True)
     plot_data = add_age_axis_columns(data, 15)
+    plot_data = keep_cohorts_with_min_realizations(plot_data)
     plot_data["valor"] = plot_data[metric] / scale
     y_min, y_max, y_step = axis_bounds(plot_data["valor"])
     x_min = 15
@@ -361,8 +366,6 @@ def draw_total_figure(
 
 
 def education_axis_limits(group: str) -> tuple[int, int]:
-    if group == "Universitaria o superior":
-        return 20, 65
     return 15, 65
 
 
@@ -385,15 +388,8 @@ def draw_single_education_figure(
     ].copy()
     plot_data = add_age_axis_columns(plot_data, x_min)
     plot_data["valor"] = plot_data[metric] / scale
-    cohort_counts = plot_data.groupby("cohorte")["anio"].nunique()
-    cohorts = list(
-        plot_data[
-            plot_data["cohorte"].isin(set(cohort_counts[cohort_counts >= 2].index))
-        ]
-        .sort_values("orden_cohorte")["cohorte"]
-        .drop_duplicates()
-    )
-    plot_data = plot_data[plot_data["cohorte"].isin(set(cohorts))].copy()
+    plot_data = keep_cohorts_with_min_realizations(plot_data)
+    cohorts = list(plot_data.sort_values("orden_cohorte")["cohorte"].drop_duplicates())
     y_min, y_max, y_step = axis_bounds(plot_data["valor"])
 
     width, height = 1800, 1080
@@ -403,10 +399,7 @@ def draw_single_education_figure(
 
     draw_text(draw, (80, 45), f"{title_prefix}: {group}", "#111111", 43, True)
     draw_text(draw, (80, 97), subtitle, "#444444", 27)
-    if group == "Universitaria o superior":
-        range_text = "Eje horizontal: tramos decenales de edad, de 20--29 a 60--64 años"
-    else:
-        range_text = "Eje horizontal: tramos decenales de edad, de 15--24 a 55--64 años"
+    range_text = "Eje horizontal: tramos decenales de edad, de 15--24 a 55--64 años"
     draw_text(draw, (80, 137), range_text, "#555555", 23)
     draw.line((80, 170, 1660, 170), fill=EDUCATION_COLORS[group], width=5)
 
