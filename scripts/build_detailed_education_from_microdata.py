@@ -176,8 +176,9 @@ def list_pairs(zip_path: Path) -> list[MicroPair]:
 
 
 def detect_separator(header: str) -> str:
-    if header.count(";") >= header.count(","):
-        return ";"
+    semicolon = chr(59)
+    if header.count(semicolon) >= header.count(","):
+        return semicolon
     return ","
 
 
@@ -386,7 +387,7 @@ def fmt_percent(value: float, digits: int = 1) -> str:
 def fmt_growth(value: float) -> str:
     if pd.isna(value):
         return "--"
-    return f"{100 * value:.2f}\\%".replace(".", ",")
+    return f"{100 * value:.1f}\\%".replace(".", ",")
 
 
 def latex_escape(text: str) -> str:
@@ -424,8 +425,8 @@ def write_detail_table(summary: pd.DataFrame) -> None:
     occupation_rows = table_rows(
         summary,
         [
-            ("trabajadores_2021", "millions", 2),
-            ("trabajadores_2025", "millions", 2),
+            ("trabajadores_2021", "millions", 1),
+            ("trabajadores_2025", "millions", 1),
             ("participacion_2021", "share", 1),
             ("participacion_2025", "share", 1),
             ("dif_participacion", "pp", 1),
@@ -434,9 +435,9 @@ def write_detail_table(summary: pd.DataFrame) -> None:
     monthly_rows = table_rows(
         summary,
         [
-            ("rem_trabajador_2021", "millions", 2),
-            ("rem_trabajador_2025", "millions", 2),
-            ("crec_rem_trabajador", "growth", 2),
+            ("rem_trabajador_2021", "millions", 1),
+            ("rem_trabajador_2025", "millions", 1),
+            ("crec_rem_trabajador", "growth", 1),
         ],
     )
     hourly_rows = table_rows(
@@ -444,7 +445,7 @@ def write_detail_table(summary: pd.DataFrame) -> None:
         [
             ("rem_hora_2021", "thousands", 1),
             ("rem_hora_2025", "thousands", 1),
-            ("crec_rem_hora", "growth", 2),
+            ("crec_rem_hora", "growth", 1),
         ],
     )
 
@@ -462,7 +463,7 @@ def write_detail_table(summary: pd.DataFrame) -> None:
             *occupation_rows,
             r"\bottomrule",
             r"\end{tabular}",
-            r"\caption*{\footnotesize Nota: ocupados en millones de personas. Participaciones en porcentaje. Diferencia en puntos porcentuales. Cálculos con microdatos mensuales de la GEIH marco 2018. Fuente: cálculos propios con GEIH del DANE.}",
+            r"\caption*{\footnotesize Nota: ocupados en millones de personas. Participaciones en porcentaje. Diferencia en puntos porcentuales. Por redondeo a una cifra decimal, categorías con menos de 50 mil ocupados pueden aparecer como 0,0 millones. Cálculos con microdatos mensuales de la GEIH marco 2018. Fuente: cálculos propios con GEIH del DANE.}",
             r"\end{table}",
             "",
             r"\begin{table}[H]",

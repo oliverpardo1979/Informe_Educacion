@@ -368,8 +368,8 @@ def draw_kernel_figure(microdata: pd.DataFrame, summary: pd.DataFrame) -> None:
         start_median = variable_summary[variable_summary["anio"] == START_YEAR]["mediana"].iloc[0] / spec["scale"]
         end_median = variable_summary[variable_summary["anio"] == END_YEAR]["mediana"].iloc[0] / spec["scale"]
         median_text = (
-            f"Mediana: {fmt_decimal(start_median, 2 if spec['key'] == 'rem_mensual' else 1)} "
-            f"→ {fmt_decimal(end_median, 2 if spec['key'] == 'rem_mensual' else 1)}"
+            f"Mediana: {fmt_decimal(start_median, 1)} "
+            f"→ {fmt_decimal(end_median, 1)}"
         )
         draw_text(draw, (left, bottom + 58), median_text, "#333333", 21)
 

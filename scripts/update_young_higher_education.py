@@ -140,7 +140,7 @@ def fmt_decimal(value: float, digits: int = 1) -> str:
     return text.replace(",", "X").replace(".", ",").replace("X", ".")
 
 
-def fmt_percent(value: float, digits: int = 2) -> str:
+def fmt_percent(value: float, digits: int = 1) -> str:
     return f"{fmt_decimal(100 * value, digits)}\\%"
 
 
@@ -253,14 +253,14 @@ def write_table(series: pd.DataFrame) -> None:
         r"\midrule",
         (
             "Ocupados (millones de personas) & "
-            f"{fmt_decimal(start['ocupados'] / 1e6, 2)} & "
-            f"{fmt_decimal(end['ocupados'] / 1e6, 2)} & "
+            f"{fmt_decimal(start['ocupados'] / 1e6, 1)} & "
+            f"{fmt_decimal(end['ocupados'] / 1e6, 1)} & "
             f"{fmt_percent(occupied_growth)} \\\\"
         ),
         (
             "Remuneración mensual por trabajador (millones de pesos de 2025) & "
-            f"{fmt_decimal(start['rem_por_trabajador'] / 1e6, 2)} & "
-            f"{fmt_decimal(end['rem_por_trabajador'] / 1e6, 2)} & "
+            f"{fmt_decimal(start['rem_por_trabajador'] / 1e6, 1)} & "
+            f"{fmt_decimal(end['rem_por_trabajador'] / 1e6, 1)} & "
             f"{fmt_percent(worker_growth)} \\\\"
         ),
         (
@@ -328,7 +328,7 @@ def draw_series(series: pd.DataFrame) -> None:
     while tick <= worker_max + worker_step / 2:
         y = bottom - (tick - worker_min) / (worker_max - worker_min) * (bottom - top)
         draw.line((left, y, right, y), fill="#e8e8e8", width=1)
-        draw_text(draw, (left - 14, y), fmt_decimal(tick, 2), worker_color, 20, anchor="rm")
+        draw_text(draw, (left - 14, y), fmt_decimal(tick, 1), worker_color, 20, anchor="rm")
         tick += worker_step
 
     tick = hour_min
@@ -367,7 +367,7 @@ def draw_series(series: pd.DataFrame) -> None:
     draw_text(
         draw,
         (worker_points[-1][0] - 14, worker_points[-1][1] - 34),
-        f"Trabajador: {fmt_decimal(last['rem_trabajador_millones'], 2)}",
+        f"Trabajador: {fmt_decimal(last['rem_trabajador_millones'], 1)}",
         worker_color,
         22,
         True,
