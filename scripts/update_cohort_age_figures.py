@@ -28,19 +28,19 @@ AGE_MAX_LABEL = 64
 EDUCATION_ORDER = {
     "Primaria o menos": 1,
     "Secundaria": 2,
-    "Universitaria o superior": 3,
+    "Superior o normalista": 3,
 }
 
 EDUCATION_COLORS = {
     "Primaria o menos": "#8a3ffc",
     "Secundaria": "#0072b2",
-    "Universitaria o superior": "#009e73",
+    "Superior o normalista": "#009e73",
 }
 
 EDUCATION_SLUGS = {
     "Primaria o menos": "primaria",
     "Secundaria": "secundaria",
-    "Universitaria o superior": "superior",
+    "Superior o normalista": "superior",
 }
 
 COHORT_COLORS = {
@@ -90,8 +90,8 @@ def education_group(value: object) -> str | None:
             return "Primaria o menos"
         if normalized in {"básica secundaria", "basica secundaria", "media"}:
             return "Secundaria"
-        if normalized in {"superior o universitaria", "universitaria o superior"}:
-            return "Universitaria o superior"
+        if normalized in {"superior o universitaria", "universitaria o superior", "superior o normalista"}:
+            return "Superior o normalista"
         return None
     code = float(value)
     if code in (1, 2, 3):
@@ -99,7 +99,7 @@ def education_group(value: object) -> str | None:
     if code in (4, 5):
         return "Secundaria"
     if code == 6:
-        return "Universitaria o superior"
+        return "Superior o normalista"
     return None
 
 

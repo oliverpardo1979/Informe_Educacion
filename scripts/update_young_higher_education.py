@@ -153,7 +153,7 @@ def is_higher_education(value: object) -> bool:
         return False
     if isinstance(value, str):
         normalized = value.strip().lower()
-        return normalized in {"superior o universitaria", "universitaria o superior"}
+        return normalized in {"superior o universitaria", "universitaria o superior", "superior o normalista"}
     return float(value) == 6
 
 
@@ -244,7 +244,7 @@ def write_table(series: pd.DataFrame) -> None:
     lines = [
         r"\begin{table}[H]",
         r"\centering",
-        r"\caption{Remuneración laboral de ocupados de 25 a 29 años con educación universitaria o superior, 2010 y 2025}",
+        r"\caption{Remuneración laboral de ocupados de 25 a 29 años con educación superior o normalista, 2010 y 2025}",
         r"\label{tab:remuneracion_recien_graduados}",
         r"\footnotesize",
         r"\begin{tabular}{@{}p{6.6cm}rrr@{}}",
@@ -274,8 +274,8 @@ def write_table(series: pd.DataFrame) -> None:
         (
             r"\caption*{\footnotesize Nota: la GEIH no identifica si la persona acaba de graduarse ni el año de graduación. "
             r"Este cuadro aproxima la remuneración de recién graduados con personas ocupadas "
-            r"de 25 a 29 años que reportan educación universitaria o superior. "
-            r"Por lo tanto, debe leerse como una aproximación a jóvenes con educación superior, no como graduados observados directamente. "
+            r"de 25 a 29 años que reportan educación superior o normalista. "
+            r"Por lo tanto, debe leerse como una aproximación a jóvenes con ese logro educativo, no como graduados observados directamente. "
             r"El crecimiento es anualizado para 2010--2025. "
             r"La serie excluye 2020. Fuente: cálculos propios con GEIH del DANE.}"
         ),
@@ -317,7 +317,7 @@ def draw_series(series: pd.DataFrame) -> None:
     draw = ImageDraw.Draw(img)
     left, top, right, bottom = 145, 190, 1315, 735
 
-    draw_text(draw, (85, 50), "Remuneración laboral: 25 a 29 años con educación universitaria o superior", "#111111", 38, True)
+    draw_text(draw, (85, 50), "Remuneración laboral: 25 a 29 años con educación superior o normalista", "#111111", 38, True)
     draw_text(draw, (85, 98), "Pesos constantes de 2025. La serie excluye 2020", "#444444", 26)
     draw.line((85, 138, 1515, 138), fill=accent_color, width=5)
     draw.rectangle((left, top, right, bottom), outline="#222222", width=2)

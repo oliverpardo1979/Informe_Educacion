@@ -21,7 +21,7 @@ YEAR_2010 = "#6b7280"
 GROUP_COLORS = {
     "Primaria o menos": "#8b3ff2",
     "Secundaria": "#087db5",
-    "Universitaria o superior": "#0a9d73",
+    "Superior o normalista": "#0a9d73",
 }
 
 

@@ -125,7 +125,7 @@ def is_higher_education(value: object) -> bool:
         return False
     if isinstance(value, str):
         normalized = value.strip().lower()
-        return normalized in {"superior o universitaria", "universitaria o superior"}
+        return normalized in {"superior o universitaria", "universitaria o superior", "superior o normalista"}
     return float(value) == 6
 
 
@@ -292,7 +292,7 @@ def draw_kernel_figure(microdata: pd.DataFrame, summary: pd.DataFrame) -> None:
     draw_text(
         draw,
         (80, 48),
-        "Distribución de la remuneración: jóvenes con educación universitaria o superior",
+        "Distribución de la remuneración: jóvenes con educación superior o normalista",
         "#111111",
         41,
         True,
@@ -397,7 +397,7 @@ def draw_kernel_figure(microdata: pd.DataFrame, summary: pd.DataFrame) -> None:
     draw_text(
         draw,
         (80, 962),
-        "El grupo aproxima jóvenes con educación superior. La GEIH no identifica año de graduación. SMLMV sin auxilio de transporte.",
+        "El grupo aproxima jóvenes con educación superior o normalista. La GEIH no identifica año de graduación. SMLMV sin auxilio de transporte.",
         "#555555",
         21,
     )

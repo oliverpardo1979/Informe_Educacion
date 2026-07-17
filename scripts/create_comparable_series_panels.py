@@ -57,7 +57,7 @@ GROUPS = [
     ("Total", "#222222"),
     ("Primaria o menos", "#8a3ffc"),
     ("Secundaria", "#0072b2"),
-    ("Universitaria o superior", "#009e73"),
+    ("Superior o normalista", "#009e73"),
 ]
 
 WORKER_COLOR = "#0072b2"

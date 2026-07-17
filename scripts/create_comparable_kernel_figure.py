@@ -38,14 +38,14 @@ IPC_DIC = {
 COMPARABLE_ORDER = {
     "Primaria o menos": 1,
     "Secundaria": 2,
-    "Universitaria o superior": 3,
+    "Superior o normalista": 3,
 }
 
 GROUP_COLORS = {
     "Total": "#222222",
     "Primaria o menos": "#8a3ffc",
     "Secundaria": "#0072b2",
-    "Universitaria o superior": "#009e73",
+    "Superior o normalista": "#009e73",
 }
 
 YEAR_COLORS = {
@@ -96,7 +96,7 @@ def education_comparable(code: object) -> str | None:
     if value in (4, 5):
         return "Secundaria"
     if value == 6:
-        return "Universitaria o superior"
+        return "Superior o normalista"
     return None
 
 

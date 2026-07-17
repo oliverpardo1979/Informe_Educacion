@@ -106,13 +106,13 @@ COMPARABLE_GROUPS = {
     "Basica secundaria": "Secundaria",
     "Media academica": "Secundaria",
     "Media tecnica": "Secundaria",
-    "Normalista": "Universitaria o superior",
-    "Tecnica profesional": "Universitaria o superior",
-    "Tecnologica": "Universitaria o superior",
-    "Universitaria": "Universitaria o superior",
-    "Especializacion": "Universitaria o superior",
-    "Maestria": "Universitaria o superior",
-    "Doctorado": "Universitaria o superior",
+    "Normalista": "Superior o normalista",
+    "Tecnica profesional": "Superior o normalista",
+    "Tecnologica": "Superior o normalista",
+    "Universitaria": "Superior o normalista",
+    "Especializacion": "Superior o normalista",
+    "Maestria": "Superior o normalista",
+    "Doctorado": "Superior o normalista",
 }
 
 KEY_COLS = ["DIRECTORIO", "SECUENCIA_P", "ORDEN", "HOGAR"]
