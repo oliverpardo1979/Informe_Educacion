@@ -103,9 +103,9 @@ ORDERED_CATEGORIES = [
 COMPARABLE_GROUPS = {
     "Preescolar o ninguno": "Primaria o menos",
     "Basica primaria": "Primaria o menos",
-    "Basica secundaria": "Secundaria",
-    "Media academica": "Secundaria",
-    "Media tecnica": "Secundaria",
+    "Basica secundaria": "Secundaria o media",
+    "Media academica": "Secundaria o media",
+    "Media tecnica": "Secundaria o media",
     "Normalista": "Superior o universitaria",
     "Tecnica profesional": "Superior o universitaria",
     "Tecnologica": "Superior o universitaria",

@@ -56,7 +56,7 @@ IPC_DIC = {
 GROUPS = [
     ("Total", "#222222"),
     ("Primaria o menos", "#8a3ffc"),
-    ("Secundaria", "#0072b2"),
+    ("Secundaria o media", "#0072b2"),
     ("Superior o universitaria", "#009e73"),
 ]
 

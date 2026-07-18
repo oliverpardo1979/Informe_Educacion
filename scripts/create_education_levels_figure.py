@@ -20,7 +20,7 @@ AXIS = "#444444"
 YEAR_2010 = "#6b7280"
 GROUP_COLORS = {
     "Primaria o menos": "#8b3ff2",
-    "Secundaria": "#087db5",
+    "Secundaria o media": "#087db5",
     "Superior o universitaria": "#0a9d73",
 }
 
