@@ -15,23 +15,15 @@
 
 \section{Metodología}\label{sec:metodologia}
 
+\subsection{Fuente y periodo}
+
 \textbf{El informe calcula la remuneración laboral a partir de la GEIH para 2010--2025, excluyendo 2020.} Con la encuesta se construyen dos medidas: la remuneración mensual por trabajador y la remuneración por hora trabajada. En ambos casos se usan los ingresos laborales, las horas trabajadas y los factores de expansión de la GEIH. Todos los valores se expresan en pesos constantes de 2025. El año 2020 se excluye porque fue atípico por la pandemia y por los cambios operativos de la encuesta.
 
-\textbf{El crecimiento de la remuneración promedio puede descomponerse en dos componentes.} En primer lugar, la remuneración promedio puede escribirse como un promedio ponderado de la remuneración de cada logro educativo. Sea \(g\) uno de los tres logros educativos comparables, \(r_{g,t}\) la remuneración del grupo \(g\) en el año \(t\), y \(s_{g,t}\) su peso relativo. Para la remuneración mensual por trabajador, \(s_{g,t}\) es la participación del grupo en los ocupados. Para la remuneración por hora, \(s_{g,t}\) es la participación del grupo en las horas trabajadas. En ambos casos:
-\begin{equation}\label{eq:remuneracion_promedio_educacion}
-R_t = \sum_g s_{g,t} r_{g,t}.
-\end{equation}
-El cambio entre 2010 y 2025 puede escribirse como la suma de dos términos. Definiendo \(\bar{s}_g=(s_{g,2010}+s_{g,2025})/2\) y \(\bar{r}_g=(r_{g,2010}+r_{g,2025})/2\), se tiene:
-\begin{equation}\label{eq:descomposicion_educacion}
-\begin{aligned}
-R_{2025}-R_{2010}
-&=
-\underbrace{\sum_g \bar{s}_g \left(r_{g,2025}-r_{g,2010}\right)}_{\substack{\text{mayor productividad}\\\text{de cada logro educativo}}} \\
-&\quad +
-\underbrace{\sum_g \bar{r}_g \left(s_{g,2025}-s_{g,2010}\right)}_{\substack{\text{mayor logro educativo}\\\text{de la población ocupada}}}.
-\end{aligned}
-\end{equation}
-El primer término mide cuánto cambia la remuneración promedio por variaciones de remuneración dentro de cada logro educativo, manteniendo como referencia el peso promedio de los grupos. Como la remuneración se usa aquí como aproximación de productividad laboral, este componente se denomina mayor productividad de cada logro educativo. El segundo término mide cuánto cambia la remuneración promedio por variaciones en el peso relativo de los grupos, manteniendo como referencia la remuneración promedio de cada grupo. Este componente se denomina mayor logro educativo de la población ocupada. En el Cuadro \ref{tab:descomposicion_remuneracion_educacion}, las etiquetas de la cascada muestran el valor de cada término y su participación en el cambio total \(R_{2025}-R_{2010}\). Por lo tanto, la descomposición no debe leerse como una estimación causal. Su aporte es ordenar cuánto del cambio observado se asocia con mayor productividad de cada logro educativo y cuánto con el mayor logro educativo de la población ocupada.
+\textbf{La clasificación detallada se usa desde 2021.} Para el análisis de esos logros desagregados se procesan los microdatos mensuales de la GEIH marco 2018 correspondientes a 2021 y 2025. El cálculo une los módulos de características generales y ocupados con las llaves originales de DANE: \texttt{DIRECTORIO}, \texttt{SECUENCIA\_P}, \texttt{ORDEN} y \texttt{HOGAR}. La remuneración mensual por trabajador se calcula directamente con \texttt{INGLABO}, deflactado a pesos de 2025 y ponderado por \texttt{FEX\_C18}/12. La remuneración por hora divide el ingreso mensual real expandido por las horas mensuales expandidas, calculadas a partir de \texttt{P6800} por 52/12. El filtro exige ocupación, ingreso positivo, horas válidas y un código válido de \texttt{P3042}. Al reagrupar las categorías detalladas en los tres logros comparables, las diferencias frente a la serie comparable son pequeñas y se dejan como diferencias de procesamiento. No se ajustan con factores.
+
+\textbf{La comparación por edad se presenta de dos maneras.} Primero se cruzan los tres logros educativos con cinco rangos etarios: 15--24, 25--34, 35--44, 45--54 y 55 años o más. Ese ejercicio compara a personas del mismo rango de edad observadas en 2010 y 2025. Luego se construyen cohortes de nacimiento aproximadas como año de encuesta menos edad reportada. En ese segundo ejercicio se comparan las cohortes que aparecen en ambos años dentro de los rangos solicitados. Como la GEIH no sigue individuos, la comparación debe leerse como una comparación de cohortes observadas en dos cortes transversales.
+
+\subsection{Correspondencia entre logros educativos}
 
 \textbf{La apertura de la pregunta educativa ocurre con la GEIH marco 2018 y se usa aquí desde 2021.} Antes de esa apertura, la pregunta comparable era \texttt{P6210}: ``¿Cuál es el nivel educativo más alto alcanzado por ... y el último año o grado aprobado en este nivel?''. Sus opciones separaban ninguno, preescolar, básica primaria, básica secundaria, media y superior o universitaria. Desde los microdatos de la GEIH marco 2018 usados para 2021, y en la serie posterior, el informe usa \texttt{P3042}, que pregunta por el mayor nivel educativo alcanzado y el último grado o semestre aprobado. Esa pregunta distingue media académica y media técnica, normalista, técnica profesional, tecnológica, universitaria, especialización, maestría y doctorado.
 
@@ -66,9 +58,23 @@ Superior o universitaria & Doctorado \\
 \caption*{\footnotesize Nota: la primera columna reporta los grupos comparables usados en la serie larga. La segunda muestra las categorías detalladas disponibles desde 2021. Fuente: clasificación propia a partir de la variable de logro educativo de la GEIH.}
 \end{table}
 
-\textbf{La comparación por edad se presenta de dos maneras.} Primero se cruzan los tres logros educativos con cinco rangos etarios: 15--24, 25--34, 35--44, 45--54 y 55 años o más. Ese ejercicio compara a personas del mismo rango de edad observadas en 2010 y 2025. Luego se construyen cohortes de nacimiento aproximadas como año de encuesta menos edad reportada. En ese segundo ejercicio se comparan las cohortes que aparecen en ambos años dentro de los rangos solicitados. Como la GEIH no sigue individuos, la comparación debe leerse como una comparación de cohortes observadas en dos cortes transversales.
+\subsection{Descomposición del crecimiento de la remuneración}
 
-\textbf{La clasificación detallada se usa desde 2021.} Para esa sección se procesan los microdatos mensuales de la GEIH marco 2018 correspondientes a 2021 y 2025. El cálculo une los módulos de características generales y ocupados con las llaves originales de DANE: \texttt{DIRECTORIO}, \texttt{SECUENCIA\_P}, \texttt{ORDEN} y \texttt{HOGAR}. La remuneración mensual por trabajador se calcula directamente con \texttt{INGLABO}, deflactado a pesos de 2025 y ponderado por \texttt{FEX\_C18}/12. La remuneración por hora divide el ingreso mensual real expandido por las horas mensuales expandidas, calculadas a partir de \texttt{P6800} por 52/12. El filtro exige ocupación, ingreso positivo, horas válidas y un código válido de \texttt{P3042}. Al reagrupar las categorías detalladas en los tres logros comparables, las diferencias frente a la serie comparable son pequeñas y se dejan como diferencias de procesamiento. No se ajustan con factores.
+\textbf{El crecimiento de la remuneración promedio puede descomponerse en dos componentes.} En primer lugar, la remuneración promedio puede escribirse como un promedio ponderado de la remuneración de cada logro educativo. Sea \(g\) uno de los tres logros educativos comparables, \(r_{g,t}\) la remuneración del grupo \(g\) en el año \(t\), y \(s_{g,t}\) su peso relativo. Para la remuneración mensual por trabajador, \(s_{g,t}\) es la participación del grupo en los ocupados. Para la remuneración por hora, \(s_{g,t}\) es la participación del grupo en las horas trabajadas. En ambos casos:
+\begin{equation}\label{eq:remuneracion_promedio_educacion}
+R_t = \sum_g s_{g,t} r_{g,t}.
+\end{equation}
+El cambio entre 2010 y 2025 puede escribirse como la suma de dos términos. Definiendo \(\bar{s}_g=(s_{g,2010}+s_{g,2025})/2\) y \(\bar{r}_g=(r_{g,2010}+r_{g,2025})/2\), se tiene:
+\begin{equation}\label{eq:descomposicion_educacion}
+\begin{aligned}
+R_{2025}-R_{2010}
+&=
+\underbrace{\sum_g \bar{s}_g \left(r_{g,2025}-r_{g,2010}\right)}_{\substack{\text{mayor productividad}\\\text{de cada logro educativo}}} \\
+&\quad +
+\underbrace{\sum_g \bar{r}_g \left(s_{g,2025}-s_{g,2010}\right)}_{\substack{\text{mayor logro educativo}\\\text{de la población ocupada}}}.
+\end{aligned}
+\end{equation}
+El primer término mide cuánto cambia la remuneración promedio por variaciones de remuneración dentro de cada logro educativo, manteniendo como referencia el peso promedio de los grupos. Como la remuneración se usa aquí como aproximación de productividad laboral, este componente se denomina mayor productividad de cada logro educativo. El segundo término mide cuánto cambia la remuneración promedio por variaciones en el peso relativo de los grupos, manteniendo como referencia la remuneración promedio de cada grupo. Este componente se denomina mayor logro educativo de la población ocupada. En el Cuadro \ref{tab:descomposicion_remuneracion_educacion}, las etiquetas de la cascada muestran el valor de cada término y su participación en el cambio total \(R_{2025}-R_{2010}\). Por lo tanto, la descomposición no debe leerse como una estimación causal. Su aporte es ordenar cuánto del cambio observado se asocia con mayor productividad de cada logro educativo y cuánto con el mayor logro educativo de la población ocupada.
 
 \section{Dinámica de la remuneración}\label{sec:grupos_comparables}
 
