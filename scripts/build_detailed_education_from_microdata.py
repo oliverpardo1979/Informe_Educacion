@@ -448,6 +448,14 @@ def write_detail_table(summary: pd.DataFrame) -> None:
             ("crec_rem_hora", "growth", 1),
         ],
     )
+    remuneration_rows: list[str] = []
+    for monthly_row, hourly_row in zip(monthly_rows, hourly_rows):
+        if monthly_row == r"\midrule":
+            remuneration_rows.append(monthly_row)
+            continue
+        monthly_parts = monthly_row.replace(r" \\", "").split(" & ")
+        hourly_parts = hourly_row.replace(r" \\", "").split(" & ")
+        remuneration_rows.append(" & ".join(monthly_parts + hourly_parts[1:]) + r" \\")
 
     text = "\n".join(
         [
@@ -472,21 +480,17 @@ def write_detail_table(summary: pd.DataFrame) -> None:
             r"\label{tab:remuneracion_educacion_detallada_trabajador}",
             r"\label{tab:remuneracion_educacion_detallada}",
             r"\scriptsize",
-            r"\setlength{\tabcolsep}{5pt}",
-            r"\begin{tabular}{@{}p{5.1cm}rrr@{}}",
+            r"\setlength{\tabcolsep}{3pt}",
+            r"\begin{tabular}{@{}p{3.6cm}rrrrrr@{}}",
             r"\toprule",
-            r"\multicolumn{4}{@{}l}{\textbf{Panel A. Remuneración mensual por trabajador}} \\",
-            r"Logro educativo & 2021 & 2025 & Crec. anual \\",
+            r"& \multicolumn{3}{c}{Remuneración mensual} & \multicolumn{3}{c}{Remuneración por hora} \\",
+            r"\cmidrule(lr){2-4} \cmidrule(l){5-7}",
+            r"Logro educativo & 2021 & 2025 & Crec. anual & 2021 & 2025 & Crec. anual \\",
             r"\midrule",
-            *monthly_rows,
-            r"\addlinespace[0.7em]",
-            r"\multicolumn{4}{@{}l}{\textbf{Panel B. Remuneración por hora trabajada}} \\",
-            r"Logro educativo & 2021 & 2025 & Crec. anual \\",
-            r"\midrule",
-            *hourly_rows,
+            *remuneration_rows,
             r"\bottomrule",
             r"\end{tabular}",
-            r"\caption*{\footnotesize Nota: el Panel A reporta remuneración mensual en millones de pesos mensuales de 2025 por trabajador. El Panel B reporta remuneración por hora en miles de pesos de 2025 por hora trabajada. El crecimiento es anualizado para 2021--2025. Cálculos con microdatos mensuales de la GEIH marco 2018. Fuente: cálculos propios con GEIH del DANE.}",
+            r"\caption*{\footnotesize Nota: la remuneración mensual se reporta en millones de pesos mensuales de 2025 por trabajador. La remuneración por hora se reporta en miles de pesos de 2025 por hora trabajada. El crecimiento es anualizado para 2021--2025. Cálculos con microdatos mensuales de la GEIH marco 2018. Fuente: cálculos propios con GEIH del DANE.}",
             r"\end{table}",
             "",
         ]
