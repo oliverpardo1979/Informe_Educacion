@@ -15,7 +15,7 @@
 
 \section{Metodología}\label{sec:metodologia}
 
-\subsection{Fuente, periodo y medición}
+\subsection{Medición}
 
 \textbf{El informe calcula la remuneración laboral a partir de la Gran Encuesta Integrada de Hogares (GEIH) para 2010--2025.} A partir de los ingresos laborales devengados el último mes y las horas trabajadas la última semana se construyen dos medidas: la remuneración mensual por trabajador y la remuneración por hora trabajada. Ambas se expresan en pesos constantes de 2025. 
 
@@ -53,7 +53,7 @@ Superior o universitaria & Superior o universitaria & Doctorado \\
 
 \subsection{Descomposición del crecimiento de la remuneración}
 
-\textbf{El crecimiento de la remuneración promedio puede descomponerse en dos componentes.} En primer lugar, la remuneración promedio puede escribirse como un promedio ponderado de la remuneración de cada logro educativo. Sea \(g\) uno de los tres logros educativos comparables, \(r_{g,t}\) la remuneración del grupo \(g\) en el año \(t\), y \(s_{g,t}\) su peso relativo. Para la remuneración mensual por trabajador, \(s_{g,t}\) es la participación del grupo en los ocupados. Para la remuneración por hora, \(s_{g,t}\) es la participación del grupo en las horas trabajadas. En ambos casos:
+\textbf{El crecimiento de la remuneración promedio puede descomponerse en dos componentes.} En primer lugar, la remuneración promedio puede escribirse como un promedio ponderado de la remuneración de cada logro educativo. Sea \(g\) uno de los tres logros educativos comparables, \(r_{g,t}\) la remuneración del grupo \(g\) en el año \(t\), y \(s_{g,t}\) su peso relativo. Tanto la remuneración por trabajador como la remuneración por hora trabajada se pueden escribir como:
 \begin{equation}\label{eq:remuneracion_promedio_educacion}
 R_t = \sum_g s_{g,t} r_{g,t}.
 \end{equation}
@@ -67,9 +67,9 @@ R_{2025}-R_{2010}
 \underbrace{\sum_g \bar{r}_g \left(s_{g,2025}-s_{g,2010}\right)}_{\substack{\text{mayor logro educativo}\\\text{de la población ocupada}}}.
 \end{aligned}
 \end{equation}
-El primer término mide cuánto cambia la remuneración promedio por variaciones de remuneración dentro de cada logro educativo, manteniendo como referencia el peso promedio de los grupos. Como la remuneración se usa aquí como aproximación de productividad laboral, este componente se denomina mayor productividad de cada logro educativo. El segundo término mide cuánto cambia la remuneración promedio por variaciones en el peso relativo de los grupos, manteniendo como referencia la remuneración promedio de cada grupo. Este componente se denomina mayor logro educativo de la población ocupada. En el Cuadro \ref{tab:descomposicion_remuneracion_educacion}, las etiquetas de la cascada muestran el valor de cada término y su participación en el cambio total \(R_{2025}-R_{2010}\). Por lo tanto, la descomposición no debe leerse como una estimación causal. Su aporte es ordenar cuánto del cambio observado se asocia con mayor productividad de cada logro educativo y cuánto con el mayor logro educativo de la población ocupada.
+El primer término mide cuánto cambia la remuneración promedio de la población ocupada por variaciones de remuneración dentro de cada logro educativo. Este componente se asocia a la mayor productividad de cada logro educativo. El segundo término mide cuánto cambia la remuneración promedio por variaciones en el peso relativo de los grupos. Este componente se asocia al mayor logro educativo de la población ocupada. %En el Cuadro \ref{tab:descomposicion_remuneracion_educacion}, las etiquetas de la cascada muestran el valor de cada término y su participación en el cambio total \(R_{2025}-R_{2010}\). Por lo tanto, la descomposición no debe leerse como una estimación causal. Su aporte es ordenar cuánto del cambio observado se asocia con mayor productividad de cada logro educativo y cuánto con el mayor logro educativo de la población ocupada.
 
-\section{Dinámica de la remuneración}\label{sec:grupos_comparables}
+\section{Dinámica de la remuneración por logro}\label{sec:grupos_comparables}
 
 \textbf{Antes de abrir el logro educativo en credenciales finas, conviene mirar la serie larga con una clasificación estable.} Esta sección responde tres preguntas: cómo cambió la composición educativa del empleo con remuneración observable, cómo evolucionó la remuneración por trabajador y por hora en cada grupo, y cuánto del aumento agregado provino de mayor productividad de cada logro educativo frente a cambios en el logro educativo de la población ocupada.
 
