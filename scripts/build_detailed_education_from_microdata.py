@@ -372,6 +372,13 @@ def fmt_decimal(value: float, digits: int = 1) -> str:
     return f"{value:.{digits}f}".replace(".", ",")
 
 
+def fmt_decimal_grouped(value: float, digits: int = 1) -> str:
+    if pd.isna(value):
+        return "--"
+    formatted = f"{value:,.{digits}f}"
+    return formatted.replace(",", "X").replace(".", ",").replace("X", ".")
+
+
 def fmt_signed_pp(value: float, digits: int = 1) -> str:
     if pd.isna(value):
         return "--"
@@ -406,8 +413,8 @@ def table_rows(summary: pd.DataFrame, columns: list[tuple[str, str, int]]) -> li
             value = row[col]
             if kind == "millions":
                 values.append(fmt_decimal(value / 1_000_000, digits))
-            elif kind == "hundred_thousands":
-                values.append(fmt_decimal(value / 100_000, digits))
+            elif kind == "thousands_grouped":
+                values.append(fmt_decimal_grouped(value / 1_000, digits))
             elif kind == "thousands":
                 values.append(fmt_decimal(value / 1_000, digits))
             elif kind == "share":
@@ -428,8 +435,8 @@ def write_detail_table(summary: pd.DataFrame) -> None:
     occupation_rows = table_rows(
         summary,
         [
-            ("trabajadores_2021", "hundred_thousands", 1),
-            ("trabajadores_2025", "hundred_thousands", 1),
+            ("trabajadores_2021", "thousands_grouped", 1),
+            ("trabajadores_2025", "thousands_grouped", 1),
             ("crec_trabajadores", "growth", 1),
             ("participacion_2021", "share", 1),
             ("participacion_2025", "share", 1),
@@ -468,6 +475,7 @@ def write_detail_table(summary: pd.DataFrame) -> None:
             r"\caption{Ocupación por logro educativo detallado, 2021 y 2025}",
             r"\label{tab:ocupacion_educacion_detallada}",
             r"\scriptsize",
+            r"\setlength{\tabcolsep}{3pt}",
             r"\begin{tabular}{@{}p{3.7cm}rrrrrr@{}}",
             r"\toprule",
             r"Logro educativo & \multicolumn{3}{c}{Ocupados} & \multicolumn{3}{c}{Participación en el empleo} \\",
@@ -476,7 +484,7 @@ def write_detail_table(summary: pd.DataFrame) -> None:
             *occupation_rows,
             r"\bottomrule",
             r"\end{tabular}",
-            r"\caption*{\footnotesize Nota: ocupados en cientos de miles de personas. Participaciones y crecimiento en porcentaje. Diferencia en puntos porcentuales. Cálculos con microdatos mensuales de la GEIH marco 2018. Fuente: cálculos propios con GEIH del DANE.}",
+            r"\caption*{\footnotesize Nota: ocupados en miles de personas. Participaciones y crecimiento en porcentaje. Diferencia en puntos porcentuales. Cálculos con microdatos mensuales de la GEIH marco 2018. Fuente: cálculos propios con GEIH del DANE.}",
             r"\end{table}",
             "",
         ]
