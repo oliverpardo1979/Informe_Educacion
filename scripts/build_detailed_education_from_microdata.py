@@ -213,7 +213,7 @@ def to_number(series: pd.Series) -> pd.Series:
     return pd.to_numeric(series.str.replace(",", ".", regex=False), errors="coerce")
 
 
-def process_pair(pair: MicroPair, year: int) -> tuple[pd.DataFrame, dict[str, object]]:
+def process_pair(pair: MicroPair, year: int) -> tuple[pd.DataFrame, pd.DataFrame, dict[str, object]]:
     with zipfile.ZipFile(pair.zip_path) as zf:
         char = read_selected_csv(zf, pair.characteristics, CHAR_COLS)
         occ = read_selected_csv(zf, pair.occupied, OCC_COLS)
@@ -233,13 +233,30 @@ def process_pair(pair: MicroPair, year: int) -> tuple[pd.DataFrame, dict[str, ob
     merged["income_month"] = to_number(merged["INGLABO"])
     merged["weight"] = to_number(merged["FEX_C18"]) / 12
 
-    valid = merged[
+    occupied_with_education = merged[
         (merged["oci"] == 1)
         & merged["p3042"].isin(P3042_DETAILED.keys())
-        & (merged["income_month"] > 0)
-        & (merged["hours_week"] > 0)
-        & (merged["hours_week"] <= 168)
         & (merged["weight"] > 0)
+    ].copy()
+    occupied_with_education["category"] = occupied_with_education["p3042"].astype(int).map(
+        lambda code: P3042_DETAILED[code][0]
+    )
+    occupied_with_education["order"] = occupied_with_education["p3042"].astype(int).map(
+        lambda code: P3042_DETAILED[code][1]
+    )
+    occupation_grouped = (
+        occupied_with_education.groupby(["category", "order"], as_index=False)
+        .agg(
+            workers=("weight", "sum"),
+            observations=("weight", "size"),
+        )
+        .assign(year=year)
+    )
+
+    valid = occupied_with_education[
+        (occupied_with_education["income_month"] > 0)
+        & (occupied_with_education["hours_week"] > 0)
+        & (occupied_with_education["hours_week"] <= 168)
     ].copy()
 
     price_factor = PRICE_FACTORS_2025[year]
@@ -273,10 +290,11 @@ def process_pair(pair: MicroPair, year: int) -> tuple[pd.DataFrame, dict[str, ob
         "characteristics_duplicate_keys": char_dupes,
         "occupied_duplicate_keys": occ_dupes,
         "unmatched_occupied_rows": unmatched,
+        "expanded_occupied_with_education": float(occupation_grouped["workers"].sum()),
         "valid_rows": int(len(valid)),
         "expanded_workers": float(valid["weight"].sum()),
     }
-    return grouped, audit
+    return grouped, occupation_grouped, audit
 
 
 def add_total(df: pd.DataFrame, year: int) -> pd.DataFrame:
@@ -296,16 +314,31 @@ def add_total(df: pd.DataFrame, year: int) -> pd.DataFrame:
     return pd.concat([df, total], ignore_index=True)
 
 
-def process_year(year: int, zip_paths: list[Path]) -> tuple[pd.DataFrame, pd.DataFrame]:
+def add_occupation_total(df: pd.DataFrame, year: int) -> pd.DataFrame:
+    total = pd.DataFrame(
+        {
+            "category": ["Total"],
+            "order": [99.0],
+            "workers": [df["workers"].sum()],
+            "observations": [df["observations"].sum()],
+            "year": [year],
+        }
+    )
+    return pd.concat([df, total], ignore_index=True)
+
+
+def process_year(year: int, zip_paths: list[Path]) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     frames: list[pd.DataFrame] = []
+    occupation_frames: list[pd.DataFrame] = []
     audits: list[dict[str, object]] = []
     for zip_path in zip_paths:
         pairs = list_pairs(zip_path)
         if not pairs:
             raise ValueError(f"No encontre pares de caracteristicas y ocupados en {zip_path}")
         for pair in pairs:
-            frame, audit = process_pair(pair, year)
+            frame, occupation_frame, audit = process_pair(pair, year)
             frames.append(frame)
+            occupation_frames.append(occupation_frame)
             audits.append(audit)
 
     annual = (
@@ -323,8 +356,22 @@ def process_year(year: int, zip_paths: list[Path]) -> tuple[pd.DataFrame, pd.Dat
     annual = add_total(annual, year)
     annual["share"] = annual["workers"] / annual.loc[annual["category"] == "Total", "workers"].iloc[0]
 
+    annual_occupation = (
+        pd.concat(occupation_frames, ignore_index=True)
+        .groupby(["category", "order", "year"], as_index=False)
+        .agg(
+            workers=("workers", "sum"),
+            observations=("observations", "sum"),
+        )
+    )
+    annual_occupation = add_occupation_total(annual_occupation, year)
+    annual_occupation["share"] = (
+        annual_occupation["workers"]
+        / annual_occupation.loc[annual_occupation["category"] == "Total", "workers"].iloc[0]
+    )
+
     audit_df = pd.DataFrame(audits)
-    return annual, audit_df
+    return annual, audit_df, annual_occupation
 
 
 def category_sort_value(category: str) -> float:
@@ -341,11 +388,12 @@ def annual_growth(v0: float, v1: float, years: int = 4) -> float:
     return (v1 / v0) ** (1 / years) - 1
 
 
-def build_summary(series: pd.DataFrame) -> pd.DataFrame:
+def build_summary(series: pd.DataFrame, occupation: pd.DataFrame) -> pd.DataFrame:
     rows: list[dict[str, object]] = []
     for category in ORDERED_CATEGORIES + ["Total"]:
         sub = series[series["category"] == category].set_index("year")
-        if not all(year in sub.index for year in YEARS):
+        occ = occupation[occupation["category"] == category].set_index("year")
+        if not all(year in sub.index and year in occ.index for year in YEARS):
             continue
         row: dict[str, object] = {
             "categoria_educativa": DISPLAY_LABELS.get(category, category),
@@ -353,8 +401,8 @@ def build_summary(series: pd.DataFrame) -> pd.DataFrame:
             "educacion_orden": category_sort_value(category),
         }
         for year in YEARS:
-            row[f"trabajadores_{year}"] = sub.loc[year, "workers"]
-            row[f"participacion_{year}"] = sub.loc[year, "share"]
+            row[f"trabajadores_{year}"] = occ.loc[year, "workers"]
+            row[f"participacion_{year}"] = occ.loc[year, "share"]
             row[f"rem_trabajador_{year}"] = sub.loc[year, "rem_worker"]
             row[f"rem_hora_{year}"] = sub.loc[year, "rem_hour"]
             row[f"observaciones_{year}"] = sub.loc[year, "observations"]
@@ -382,8 +430,11 @@ def fmt_decimal_grouped(value: float, digits: int = 1) -> str:
 def fmt_signed_pp(value: float, digits: int = 1) -> str:
     if pd.isna(value):
         return "--"
-    sign = "+" if value > 0 else ""
-    return f"{sign}{value:.{digits}f}".replace(".", ",")
+    rounded = round(value, digits)
+    if rounded == 0:
+        return f"{0:.{digits}f}".replace(".", ",")
+    sign = "+" if rounded > 0 else ""
+    return f"{sign}{rounded:.{digits}f}".replace(".", ",")
 
 
 def fmt_percent(value: float, digits: int = 1) -> str:
@@ -484,7 +535,7 @@ def write_detail_table(summary: pd.DataFrame) -> None:
             *occupation_rows,
             r"\bottomrule",
             r"\end{tabular}",
-            r"\caption*{\footnotesize Nota: ocupados en miles de personas. Participaciones y crecimiento en porcentaje. Diferencia en puntos porcentuales. Cálculos con microdatos mensuales de la GEIH marco 2018. Fuente: cálculos propios con GEIH del DANE.}",
+            r"\caption*{\footnotesize Nota: ocupados en miles de personas. Participaciones y crecimiento en porcentaje. Diferencia en puntos porcentuales. Este cuadro usa todos los ocupados con logro educativo válido. Los totales coinciden prácticamente con el total de ocupados expandido en la GEIH. Fuente: cálculos propios con GEIH del DANE.}",
             r"\end{table}",
             "",
         ]
@@ -722,16 +773,19 @@ def main() -> None:
 
     paths = required_paths(args.raw_dir)
     all_series: list[pd.DataFrame] = []
+    all_occupation: list[pd.DataFrame] = []
     all_audits: list[pd.DataFrame] = []
 
     for year in YEARS:
         print(f"Procesando {year}")
-        series, audit = process_year(year, paths[year])
+        series, audit, occupation = process_year(year, paths[year])
         all_series.append(series)
+        all_occupation.append(occupation)
         all_audits.append(audit)
 
     series = pd.concat(all_series, ignore_index=True)
-    summary = build_summary(series)
+    occupation = pd.concat(all_occupation, ignore_index=True)
+    summary = build_summary(series, occupation)
     audit = pd.concat(all_audits, ignore_index=True)
 
     TABLE_DIR.mkdir(parents=True, exist_ok=True)
@@ -740,6 +794,7 @@ def main() -> None:
 
     summary.to_csv(TABLE_DIR / "remuneracion_educacion_detallada_summary.csv", index=False)
     series.to_csv(TABLE_DIR / "remuneracion_educacion_detallada_series.csv", index=False)
+    occupation.to_csv(TABLE_DIR / "ocupacion_educacion_detallada_series.csv", index=False)
     audit.to_csv(TABLE_DIR / "remuneracion_educacion_detallada_microdata_audit.csv", index=False)
     write_reconciliation(series)
 
