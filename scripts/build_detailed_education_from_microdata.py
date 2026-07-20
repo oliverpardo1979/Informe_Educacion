@@ -435,8 +435,8 @@ def write_detail_table(summary: pd.DataFrame) -> None:
     occupation_rows = table_rows(
         summary,
         [
-            ("trabajadores_2021", "thousands_grouped", 1),
-            ("trabajadores_2025", "thousands_grouped", 1),
+            ("trabajadores_2021", "thousands_grouped", 0),
+            ("trabajadores_2025", "thousands_grouped", 0),
             ("crec_trabajadores", "growth", 1),
             ("participacion_2021", "share", 1),
             ("participacion_2025", "share", 1),
