@@ -359,6 +359,7 @@ def build_summary(series: pd.DataFrame) -> pd.DataFrame:
             row[f"rem_hora_{year}"] = sub.loc[year, "rem_hour"]
             row[f"observaciones_{year}"] = sub.loc[year, "observations"]
         row["dif_participacion"] = row["participacion_2025"] - row["participacion_2021"]
+        row["crec_trabajadores"] = annual_growth(row["trabajadores_2021"], row["trabajadores_2025"])
         row["crec_rem_trabajador"] = annual_growth(row["rem_trabajador_2021"], row["rem_trabajador_2025"])
         row["crec_rem_hora"] = annual_growth(row["rem_hora_2021"], row["rem_hora_2025"])
         rows.append(row)
@@ -427,6 +428,7 @@ def write_detail_table(summary: pd.DataFrame) -> None:
         [
             ("trabajadores_2021", "millions", 1),
             ("trabajadores_2025", "millions", 1),
+            ("crec_trabajadores", "growth", 1),
             ("participacion_2021", "share", 1),
             ("participacion_2025", "share", 1),
             ("dif_participacion", "pp", 1),
@@ -457,23 +459,29 @@ def write_detail_table(summary: pd.DataFrame) -> None:
         hourly_parts = hourly_row.replace(r" \\", "").split(" & ")
         remuneration_rows.append(" & ".join(monthly_parts + hourly_parts[1:]) + r" \\")
 
-    text = "\n".join(
+    occupation_text = "\n".join(
         [
             r"\begin{table}[H]",
             r"\centering",
             r"\caption{Ocupación por logro educativo detallado, 2021 y 2025}",
             r"\label{tab:ocupacion_educacion_detallada}",
-            r"\footnotesize",
-            r"\begin{tabular}{@{}p{4.3cm}rrrrr@{}}",
+            r"\scriptsize",
+            r"\begin{tabular}{@{}p{3.7cm}rrrrrr@{}}",
             r"\toprule",
-            r"Logro educativo & Ocupados 2021 & Ocupados 2025 & Part. 2021 & Part. 2025 & Dif. (p.p.) \\",
+            r"Logro educativo & \multicolumn{3}{c}{Ocupados} & \multicolumn{3}{c}{Participación en el empleo} \\",
+            r" & 2021 & 2025 & Crec. anual & 2021 & 2025 & Dif. (p.p.) \\",
             r"\midrule",
             *occupation_rows,
             r"\bottomrule",
             r"\end{tabular}",
-            r"\caption*{\footnotesize Nota: ocupados en millones de personas. Participaciones en porcentaje. Diferencia en puntos porcentuales. Por redondeo a una cifra decimal, categorías con menos de 50 mil ocupados pueden aparecer como 0,0 millones. Cálculos con microdatos mensuales de la GEIH marco 2018. Fuente: cálculos propios con GEIH del DANE.}",
+            r"\caption*{\footnotesize Nota: ocupados en millones de personas. Participaciones y crecimiento en porcentaje. Diferencia en puntos porcentuales. Por redondeo a una cifra decimal, categorías con menos de 50 mil ocupados pueden aparecer como 0,0 millones. Cálculos con microdatos mensuales de la GEIH marco 2018. Fuente: cálculos propios con GEIH del DANE.}",
             r"\end{table}",
             "",
+        ]
+    )
+
+    remuneration_text = "\n".join(
+        [
             r"\begin{table}[H]",
             r"\centering",
             r"\caption{Remuneración laboral por logro educativo detallado, 2021 y 2025}",
@@ -495,7 +503,8 @@ def write_detail_table(summary: pd.DataFrame) -> None:
             "",
         ]
     )
-    (SECTION_DIR / "remuneracion_educacion_detallada_table.tex").write_text(text, encoding="utf-8")
+    (SECTION_DIR / "ocupacion_educacion_detallada_table.tex").write_text(occupation_text, encoding="utf-8")
+    (SECTION_DIR / "remuneracion_educacion_detallada_table.tex").write_text(remuneration_text, encoding="utf-8")
 
 
 def write_reconciliation(series: pd.DataFrame) -> None:
