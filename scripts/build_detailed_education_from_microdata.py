@@ -406,6 +406,8 @@ def table_rows(summary: pd.DataFrame, columns: list[tuple[str, str, int]]) -> li
             value = row[col]
             if kind == "millions":
                 values.append(fmt_decimal(value / 1_000_000, digits))
+            elif kind == "hundred_thousands":
+                values.append(fmt_decimal(value / 100_000, digits))
             elif kind == "thousands":
                 values.append(fmt_decimal(value / 1_000, digits))
             elif kind == "share":
@@ -426,8 +428,8 @@ def write_detail_table(summary: pd.DataFrame) -> None:
     occupation_rows = table_rows(
         summary,
         [
-            ("trabajadores_2021", "millions", 1),
-            ("trabajadores_2025", "millions", 1),
+            ("trabajadores_2021", "hundred_thousands", 1),
+            ("trabajadores_2025", "hundred_thousands", 1),
             ("crec_trabajadores", "growth", 1),
             ("participacion_2021", "share", 1),
             ("participacion_2025", "share", 1),
@@ -474,7 +476,7 @@ def write_detail_table(summary: pd.DataFrame) -> None:
             *occupation_rows,
             r"\bottomrule",
             r"\end{tabular}",
-            r"\caption*{\footnotesize Nota: ocupados en millones de personas. Participaciones y crecimiento en porcentaje. Diferencia en puntos porcentuales. Por redondeo a una cifra decimal, categorías con menos de 50 mil ocupados pueden aparecer como 0,0 millones. Cálculos con microdatos mensuales de la GEIH marco 2018. Fuente: cálculos propios con GEIH del DANE.}",
+            r"\caption*{\footnotesize Nota: ocupados en cientos de miles de personas. Participaciones y crecimiento en porcentaje. Diferencia en puntos porcentuales. Cálculos con microdatos mensuales de la GEIH marco 2018. Fuente: cálculos propios con GEIH del DANE.}",
             r"\end{table}",
             "",
         ]
