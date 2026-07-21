@@ -399,7 +399,7 @@ def draw_figure(microdata: pd.DataFrame) -> None:
     draw_text(
         draw,
         (80, 112),
-        f"{START_YEAR} y {END_YEAR}. Kernels ponderados por factor de expansión. Eje horizontal en escala logarítmica.",
+        f"{START_YEAR} y {END_YEAR}. Distribuciones ponderadas por factor de expansión. Eje horizontal en escala logarítmica.",
         "#555555",
         size=30,
     )

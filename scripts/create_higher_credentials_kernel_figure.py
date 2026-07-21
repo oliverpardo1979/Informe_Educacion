@@ -368,7 +368,7 @@ def draw_figure(microdata: pd.DataFrame, stats: pd.DataFrame) -> None:
     draw_text(
         draw,
         (80, 144),
-        "Kernels ponderados por factor de expansión sobre el log de la remuneración. Eje horizontal en escala logarítmica.",
+        "Distribuciones ponderadas por factor de expansión sobre el log de la remuneración. Eje horizontal en escala logarítmica.",
         "#555555",
         24,
     )
