@@ -20,10 +20,13 @@ FIG_DIR = ROOT / "Paper" / "figures"
 TABLE_DIR = ROOT / "Paper" / "tables"
 OUTPUT = FIG_DIR / "fig_kernel_remuneracion_educacion_comparable_2010_2025.png"
 STATS_OUTPUT = TABLE_DIR / "remuneracion_educacion_comparable_kernel_stats.csv"
+SMLMV_STATS_OUTPUT = TABLE_DIR / "remuneracion_educacion_smlmv_stats.csv"
+SMLMV_TABLE_OUTPUT = ROOT / "Paper" / "sections" / "remuneracion_educacion_smlmv_table.tex"
 
 START_YEAR = 2010
 END_YEAR = 2025
 MONTHS_PER_WEEK = 52.0 / 12.0
+SMLMV_BAND = 0.10
 
 SMLMV_NOMINAL = {
     START_YEAR: 515_000,
@@ -85,6 +88,10 @@ def draw_text(
 def fmt_decimal(value: float, digits: int = 1) -> str:
     text = f"{value:,.{digits}f}"
     return text.replace(",", "X").replace(".", ",").replace("X", ".")
+
+
+def fmt_percent(value: float, digits: int = 1) -> str:
+    return f"{fmt_decimal(value * 100, digits)}\\%"
 
 
 def education_comparable(code: object) -> str | None:
@@ -270,12 +277,110 @@ def build_kernel_specs(microdata: pd.DataFrame) -> tuple[list[dict[str, object]]
     return specs, pd.DataFrame(figure_stats)
 
 
+def build_smlmv_stats(microdata: pd.DataFrame) -> pd.DataFrame:
+    rows: list[dict[str, float | str | int]] = []
+    groups = sorted(COMPARABLE_ORDER, key=COMPARABLE_ORDER.get) + ["Total"]
+
+    for group in groups:
+        for year in [START_YEAR, END_YEAR]:
+            if group == "Total":
+                subset = microdata[microdata["anio"] == year]
+            else:
+                subset = microdata[
+                    (microdata["grupo_educativo"] == group)
+                    & (microdata["anio"] == year)
+                ]
+
+            monthly_values = subset["rem_mensual"].to_numpy(dtype=float)
+            hourly_values = subset["rem_hora"].to_numpy(dtype=float)
+            weights = subset["peso"].to_numpy(dtype=float)
+            monthly_q10, monthly_q90 = weighted_quantile(
+                monthly_values, weights, [0.10, 0.90]
+            )
+            hourly_q10, hourly_q90 = weighted_quantile(
+                hourly_values, weights, [0.10, 0.90]
+            )
+            smlmv_real = SMLMV_NOMINAL[year] * IPC_DIC[END_YEAR] / IPC_DIC[year]
+            lower = smlmv_real * (1 - SMLMV_BAND)
+            upper = smlmv_real * (1 + SMLMV_BAND)
+            near_smlmv = (
+                (monthly_values >= lower) & (monthly_values <= upper)
+            ).astype(float)
+
+            rows.append(
+                {
+                    "grupo_educativo": group,
+                    "anio": year,
+                    "p90_p10_mensual": monthly_q90 / monthly_q10,
+                    "p90_p10_hora": hourly_q90 / hourly_q10,
+                    "masa_smlmv": np.average(near_smlmv, weights=weights),
+                }
+            )
+
+    return pd.DataFrame(rows)
+
+
+def write_smlmv_table(smlmv_stats: pd.DataFrame) -> None:
+    rows: list[str] = [
+        "\\begin{table}[H]",
+        "\\centering",
+        "\\caption{Dispersión y masa alrededor del salario mínimo por logro educativo, 2010 y 2025}",
+        "\\label{tab:masa_smlmv_educacion}",
+        "\\begingroup",
+        "\\setlength{\\tabcolsep}{3.5pt}",
+        "\\scriptsize",
+        "\\begin{tabular}{@{}p{3.5cm}rrrrrr@{}}",
+        "\\toprule",
+        "& \\multicolumn{2}{c}{P90/P10 mensual} & \\multicolumn{2}{c}{P90/P10 por hora} & \\multicolumn{2}{c}{Cerca del SMLMV} \\\\",
+        "\\cmidrule(lr){2-3} \\cmidrule(lr){4-5} \\cmidrule(l){6-7}",
+        "Logro educativo & 2010 & 2025 & 2010 & 2025 & 2010 & 2025 \\\\",
+        "\\midrule",
+    ]
+
+    ordered_groups = sorted(COMPARABLE_ORDER, key=COMPARABLE_ORDER.get)
+    for group in ordered_groups:
+        subset = smlmv_stats[smlmv_stats["grupo_educativo"] == group].set_index("anio")
+        rows.append(
+            f"{group} & "
+            f"{fmt_decimal(float(subset.loc[START_YEAR, 'p90_p10_mensual']))} & "
+            f"{fmt_decimal(float(subset.loc[END_YEAR, 'p90_p10_mensual']))} & "
+            f"{fmt_decimal(float(subset.loc[START_YEAR, 'p90_p10_hora']))} & "
+            f"{fmt_decimal(float(subset.loc[END_YEAR, 'p90_p10_hora']))} & "
+            f"{fmt_percent(float(subset.loc[START_YEAR, 'masa_smlmv']))} & "
+            f"{fmt_percent(float(subset.loc[END_YEAR, 'masa_smlmv']))} \\\\"
+        )
+
+    total = smlmv_stats[smlmv_stats["grupo_educativo"] == "Total"].set_index("anio")
+    rows.extend(
+        [
+            "\\midrule",
+            "\\textbf{Total} & "
+            f"{fmt_decimal(float(total.loc[START_YEAR, 'p90_p10_mensual']))} & "
+            f"{fmt_decimal(float(total.loc[END_YEAR, 'p90_p10_mensual']))} & "
+            f"{fmt_decimal(float(total.loc[START_YEAR, 'p90_p10_hora']))} & "
+            f"{fmt_decimal(float(total.loc[END_YEAR, 'p90_p10_hora']))} & "
+            f"{fmt_percent(float(total.loc[START_YEAR, 'masa_smlmv']))} & "
+            f"{fmt_percent(float(total.loc[END_YEAR, 'masa_smlmv']))} \\\\",
+            "\\bottomrule",
+            "\\end{tabular}",
+            "\\endgroup",
+            "\\caption*{\\footnotesize Nota: cerca del SMLMV corresponde a la proporción de ocupados cuya remuneración mensual equivalente está entre 0,9 y 1,1 veces el salario mínimo legal mensual vigente del año, ambos expresados en pesos de 2025. Cálculos ponderados con factores de expansión. Fuente: cálculos propios con GEIH del DANE y decretos del Gobierno nacional para SMLMV.}",
+            "\\end{table}",
+            "",
+        ]
+    )
+    SMLMV_TABLE_OUTPUT.write_text("\n".join(rows), encoding="utf-8")
+
+
 def draw_figure(microdata: pd.DataFrame) -> None:
     FIG_DIR.mkdir(parents=True, exist_ok=True)
     TABLE_DIR.mkdir(parents=True, exist_ok=True)
 
     specs, stats = build_kernel_specs(microdata)
     stats.to_csv(STATS_OUTPUT, index=False)
+    smlmv_stats = build_smlmv_stats(microdata)
+    smlmv_stats.to_csv(SMLMV_STATS_OUTPUT, index=False)
+    write_smlmv_table(smlmv_stats)
 
     groups = ["Total"] + sorted(COMPARABLE_ORDER, key=COMPARABLE_ORDER.get)
     width = 2200
@@ -440,6 +545,8 @@ def main() -> None:
     draw_figure(microdata)
     print(f"Figura guardada en {OUTPUT}")
     print(f"Estadísticos guardados en {STATS_OUTPUT}")
+    print(f"Masa cerca del SMLMV guardada en {SMLMV_STATS_OUTPUT}")
+    print(f"Cuadro guardado en {SMLMV_TABLE_OUTPUT}")
 
 
 if __name__ == "__main__":
