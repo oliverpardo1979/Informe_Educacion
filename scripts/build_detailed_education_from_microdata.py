@@ -535,7 +535,7 @@ def write_detail_table(summary: pd.DataFrame) -> None:
             *occupation_rows,
             r"\bottomrule",
             r"\end{tabular}",
-            r"\caption*{\footnotesize Nota: ocupados en miles de personas. Participaciones y crecimiento en porcentaje. Diferencia en puntos porcentuales. Este cuadro usa todos los ocupados con logro educativo válido. Los totales coinciden prácticamente con el total de ocupados expandido en la GEIH. Fuente: cálculos propios con GEIH del DANE.}",
+            r"\caption*{\footnotesize Nota: ocupados en miles de personas. El total oficial de ocupados del DANE fue 20,4 millones en 2021 y 23,8 millones en 2025, con crecimiento anual de 4,0\%. Fuente: cálculos propios con GEIH del DANE.}",
             r"\end{table}",
             "",
         ]
