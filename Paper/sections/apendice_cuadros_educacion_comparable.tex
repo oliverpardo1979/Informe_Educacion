@@ -64,10 +64,15 @@ Superior o universitaria
 
 \input{Paper/sections/tasas_laborales_educacion_detallada_table}
 
+% Bloque desactivado: no se referencia en el cuerpo del documento.
+\iffalse
 \input{Paper/sections/remuneracion_educacion_distribucion_table}
 
 \input{Paper/sections/remuneracion_educacion_smlmv_table}
+\fi
 
+% Bloque desactivado: no se referencia en el cuerpo del documento.
+\iffalse
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.98\textwidth]{Paper/figures/fig_remuneracion_educacion_niveles_2025.png}
@@ -75,6 +80,7 @@ Superior o universitaria
   \label{fig:remuneracion_educacion_niveles_2025}
   \caption*{\footnotesize Nota: los círculos abiertos corresponden a 2010 y los círculos llenos a 2025. Pesos constantes de 2025. Fuente: cálculos propios con GEIH del DANE.}
 \end{figure}
+\fi
 
 \begin{figure}[H]
   \centering
@@ -84,6 +90,8 @@ Superior o universitaria
   \caption*{\footnotesize Nota: distribuciones estimadas con factores de expansión sobre el log de la remuneración. Se exige que \texttt{P3042} reporte la credencial y que \texttt{P3043} reporte el título o diploma del mismo nivel. El eje horizontal está en escala logarítmica. La remuneración mensual está en millones de pesos mensuales de 2025 y la remuneración por hora en miles de pesos de 2025 por hora. Fuente: cálculos propios con GEIH del DANE.}
 \end{figure}
 
+% Bloque desactivado: no se referencia en el cuerpo del documento.
+\iffalse
 \begin{table}[H]
 \centering
 \caption{Aportes por logro educativo a la descomposición de la remuneración laboral, 2010--2025}
@@ -118,7 +126,10 @@ Logro educativo: Superior o universitaria & 1.940 & 74,3\% \\
 \end{tabular}
 \caption*{\footnotesize Nota: los aportes al cambio preservan el signo de cada contribución. Valores positivos aumentan el cambio agregado y valores negativos lo reducen. Los porcentajes dividen cada factor por el cambio total del indicador correspondiente. Los factores de productividad corresponden a \(\bar{s}_g(r_{g,2025}-r_{g,2010})\). Los factores de logro educativo corresponden a \(\bar{r}_g(s_{g,2025}-s_{g,2010})\). Las sumas pueden no coincidir por redondeo. Fuente: cálculos propios con GEIH del DANE.}
 \end{table}
+\fi
 
+% Bloque desactivado: no se referencia en el cuerpo del documento.
+\iffalse
 \begin{table}[H]
 \centering
 \caption{Composición de los ocupados por logro educativo, sexo y formalidad, 2010 y 2025}
@@ -145,15 +156,24 @@ Superior o universitaria & 67,5\% & 32,5\% & 76,0\% & 24,0\% \\
 \end{tabular}
 \caption*{\footnotesize Nota: participaciones dentro de cada logro educativo, calculadas con factores de expansión sobre la misma submuestra usada para medir remuneración. El Panel B clasifica como formal a quienes cotizan a pensión e informal a quienes no cotizan. Excluye observaciones sin clasificación formal/informal válida. Fuente: cálculos propios con GEIH del DANE.}
 \end{table}
+\fi
 
+% Bloque desactivado: no se referencia en el cuerpo del documento.
+\iffalse
 \input{Paper/sections/remuneracion_educacion_formalidad_table}
+\fi
 
 \input{Paper/sections/remuneracion_educacion_cohorte_table}
 
 \input{Paper/sections/remuneracion_educacion_cohortes_nacimiento_table}
 
+% Bloque desactivado: no se referencia en el cuerpo del documento.
+\iffalse
 \input{Paper/sections/remuneracion_educacion_recien_graduados_table}
+\fi
 
+% Bloque desactivado: no se referencia en el cuerpo del documento.
+\iffalse
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.96\textwidth]{Paper/figures/fig_remuneracion_recien_graduados_series.png}
@@ -161,7 +181,10 @@ Superior o universitaria & 67,5\% & 32,5\% & 76,0\% & 24,0\% \\
   \label{fig:remuneracion_recien_graduados_series}
   \caption*{\footnotesize Nota: el eje izquierdo muestra la remuneración mensual por trabajador y el SMLMV, ambos en millones de pesos mensuales de 2025. El eje derecho muestra la remuneración por hora trabajada en miles de pesos de 2025. La GEIH no identifica si la persona acaba de graduarse ni el año de graduación. El grupo de 25 a 29 años con educación superior se usa como aproximación a recién graduados. El SMLMV no incluye auxilio de transporte. La serie excluye 2020. Fuente: cálculos propios con GEIH del DANE y decretos del Gobierno nacional para SMLMV.}
 \end{figure}
+\fi
 
+% Bloque desactivado: no se referencia en el cuerpo del documento.
+\iffalse
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.98\textwidth]{Paper/figures/fig_kernel_remuneracion_universitaria_25_29_2010_2025.png}
@@ -169,3 +192,4 @@ Superior o universitaria & 67,5\% & 32,5\% & 76,0\% & 24,0\% \\
   \label{fig:kernel_remuneracion_universitaria_25_29}
   \caption*{\footnotesize Nota: distribuciones estimadas con factores de expansión sobre el log de la remuneración. El eje horizontal está en escala logarítmica. La GEIH no identifica si la persona acaba de graduarse ni el año de graduación. El grupo de 25 a 29 años con educación superior se usa como aproximación a recién graduados. El SMLMV no incluye auxilio de transporte. Fuente: cálculos propios con GEIH del DANE y decretos del Gobierno nacional para SMLMV.}
 \end{figure}
+\fi
