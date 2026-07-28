@@ -598,7 +598,7 @@ public class Cine11LongRunBuilder {
         lines.Add("\\caption{Descomposici\u00f3n de la variaci\u00f3n en la remuneraci\u00f3n laboral, 2010--2025}");
         lines.Add("\\label{tab:descomposicion_remuneracion_educacion}");
         lines.Add("\\includegraphics[width=0.98\\textwidth]{Paper/figures/fig_descomposicion_remuneracion_educacion_cascada.png}");
-        lines.Add("\\caption*{\\footnotesize Nota: el Panel A mide la variaci\u00f3n de la remuneraci\u00f3n mensual por trabajador en miles de pesos mensuales de 2025. El Panel B mide la variaci\u00f3n de la remuneraci\u00f3n por hora trabajada en pesos de 2025 por hora. ``Mayor productividad de cada logro educativo'' mide el aporte de los cambios de remuneraci\u00f3n dentro de cada logro CINE 11. ``Mayor logro educativo de la poblaci\u00f3n ocupada'' mide el aporte de los cambios en el peso relativo de esos logros. La descomposici\u00f3n usa los ponderadores promedio de 2010 y 2025. Fuente: c\u00e1lculos propios con GEIH del DANE.}");
+        lines.Add("\\caption*{\\footnotesize Nota: el Panel A mide la variaci\u00f3n de la remuneraci\u00f3n mensual por trabajador en miles de pesos mensuales de 2025. El Panel B mide la variaci\u00f3n de la remuneraci\u00f3n por hora trabajada en pesos de 2025 por hora. ``Mayor productividad de cada logro educativo'' mide el aporte de los cambios de remuneraci\u00f3n dentro de cada logro educativo. ``Mayor logro educativo de la poblaci\u00f3n ocupada'' mide el aporte de los cambios en el peso relativo de esos logros. La descomposici\u00f3n usa los ponderadores promedio de 2010 y 2025. Fuente: c\u00e1lculos propios con GEIH del DANE.}");
         lines.Add("\\end{table}");
         File.WriteAllLines(tablePath, lines, new UTF8Encoding(false));
     }
