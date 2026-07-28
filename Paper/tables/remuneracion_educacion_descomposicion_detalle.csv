@@ -1,0 +1,29 @@
+indicador,componente,cine11_hom_cod,grupo_educativo,aporte,participacion
+trabajador,Mayor productividad de cada logro educativo,1,Ninguno,13707.321381076919,0.034642857609718462
+trabajador,Mayor logro educativo de la población ocupada,1,Ninguno,-88919.047494335289,-0.22472734208965028
+trabajador,Mayor productividad de cada logro educativo,2,Básica primaria,23551.051453497046,0.059521163864223313
+trabajador,Mayor logro educativo de la población ocupada,2,Básica primaria,-91619.69294086803,-0.23155275115810081
+trabajador,Mayor productividad de cada logro educativo,3,Básica secundaria,5089.1215887873059,0.012861864813521402
+trabajador,Mayor logro educativo de la población ocupada,3,Básica secundaria,-16406.66367255256,-0.041464973181662167
+trabajador,Mayor productividad de cada logro educativo,4,Educación media,28415.071648893972,0.071814124272414473
+trabajador,Mayor logro educativo de la población ocupada,4,Educación media,113446.56165941882,0.28671634469043294
+trabajador,Mayor productividad de cada logro educativo,5,Técnica profesional y tecnológica,-2216.1606883397585,-0.0056009585703883247
+trabajador,Mayor logro educativo de la población ocupada,5,Técnica profesional y tecnológica,106999.96116256774,0.27042368933710775
+trabajador,Mayor productividad de cada logro educativo,6,Universitaria,-29332.277555191838,-0.074132201796629729
+trabajador,Mayor logro educativo de la población ocupada,6,Universitaria,174082.43195851255,0.43996290267314414
+trabajador,Mayor productividad de cada logro educativo,7,Posgrado,-1095.6023032338005,-0.0027689432189286138
+trabajador,Mayor logro educativo de la población ocupada,7,Posgrado,159973.1748304686,0.40430422275479749
+hora,Mayor productividad de cada logro educativo,1,Ninguno,136.43619070045287,0.052165691466159181
+hora,Mayor logro educativo de la población ocupada,1,Ninguno,-473.691337479548,-0.18111350100210885
+hora,Mayor productividad de cada logro educativo,2,Básica primaria,233.86159992863443,0.089415806796040984
+hora,Mayor logro educativo de la población ocupada,2,Básica primaria,-499.248555693613,-0.19088517487576087
+hora,Mayor productividad de cada logro educativo,3,Básica secundaria,45.361674632888935,0.017343808201761304
+hora,Mayor logro educativo de la población ocupada,3,Básica secundaria,-83.129498506069538,-0.031784145750045262
+hora,Mayor productividad de cada logro educativo,4,Educación media,319.37042151232004,0.12210967476075682
+hora,Mayor logro educativo de la población ocupada,4,Educación media,565.76942777250679,0.21631909582526959
+hora,Mayor productividad de cada logro educativo,5,Técnica profesional y tecnológica,41.472362440588739,0.015856749241836606
+hora,Mayor logro educativo de la población ocupada,5,Técnica profesional y tecnológica,560.7853255990874,0.21441344942104507
+hora,Mayor productividad de cada logro educativo,6,Universitaria,-116.59087359114207,-0.044577934258503857
+hora,Mayor logro educativo de la población ocupada,6,Universitaria,977.66396158794771,0.37380489968202035
+hora,Mayor productividad de cada logro educativo,7,Posgrado,9.0659683262344366,0.00346632740272444
+hora,Mayor logro educativo de la población ocupada,7,Posgrado,898.31246269980045,0.34346525308880432

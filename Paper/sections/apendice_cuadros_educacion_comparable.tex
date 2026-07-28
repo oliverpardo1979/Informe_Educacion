@@ -1,3 +1,5 @@
+% Bloque desactivado: esta figura correspondía a la agregación anterior de tres logros educativos.
+\iffalse
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.98\textwidth]{Paper/figures/fig_kernel_remuneracion_educacion_comparable_2010_2025.png}
@@ -5,15 +7,18 @@
   \label{fig:remuneracion_educacion_kernels}
   \caption*{\footnotesize Nota: distribuciones estimadas con factores de expansión. Los paneles mensuales muestran remuneración mensual equivalente por trabajador. Los paneles por hora muestran ingreso laboral por hora. El eje horizontal está en escala logarítmica. El SMLMV no incluye auxilio de transporte. Fuente: cálculos propios con GEIH del DANE y decretos del Gobierno nacional para SMLMV.}
 \end{figure}
+\fi
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.98\textwidth]{Paper/figures/fig_remuneracion_educacion_series_comparables.png}
   \caption{Evolución de la remuneración laboral total y por logro educativo, 2010--2025}
   \label{fig:remuneracion_educacion_series_comparables}
-  \caption*{\footnotesize Nota: el eje izquierdo muestra la remuneración mensual por trabajador y el SMLMV, ambos en millones de pesos mensuales de 2025. El eje derecho muestra la remuneración por hora trabajada en miles de pesos de 2025. El SMLMV no incluye auxilio de transporte. La serie excluye 2020. Fuente: cálculos propios con GEIH del DANE y decretos del Gobierno nacional para SMLMV.}
+  \caption*{\footnotesize Nota: el panel izquierdo muestra la remuneración mensual por trabajador en millones de pesos mensuales de 2025. El panel derecho muestra la remuneración por hora trabajada en miles de pesos de 2025. La serie excluye 2020. Fuente: cálculos propios con GEIH del DANE.}
 \end{figure}
 
+% Bloque desactivado: este cuadro correspondía a la agregación anterior de tres logros educativos.
+\iffalse
 \begin{table}[H]
 \centering
 \caption{Tasas laborales por logro educativo comparable, 2010 y 2025}
@@ -61,6 +66,7 @@ Superior o universitaria
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
+\fi
 
 \input{Paper/sections/tasas_laborales_educacion_detallada_table}
 
@@ -87,46 +93,10 @@ Superior o universitaria
   \includegraphics[width=0.98\textwidth]{Paper/figures/fig_kernel_remuneracion_credenciales_superiores_2021_2025.png}
   \caption{Distribución de la remuneración laboral por credencial de educación superior, 2021 y 2025}
   \label{fig:kernel_remuneracion_credenciales_superiores}
-  \caption*{\footnotesize Nota: distribuciones estimadas con factores de expansión sobre el log de la remuneración. Se exige que \texttt{P3042} reporte la credencial y que \texttt{P3043} reporte el título o diploma del mismo nivel. El eje horizontal está en escala logarítmica. La remuneración mensual está en millones de pesos mensuales de 2025 y la remuneración por hora en miles de pesos de 2025 por hora. Fuente: cálculos propios con GEIH del DANE.}
+  \caption*{\footnotesize Nota: distribuciones estimadas con factores de expansión sobre el log de la remuneración. Se exige que P3042 reporte la credencial y que P3043 reporte el título o diploma del mismo nivel. El eje horizontal está en escala logarítmica. La remuneración mensual está en millones de pesos mensuales de 2025 y la remuneración por hora en miles de pesos de 2025 por hora. Fuente: cálculos propios con GEIH del DANE.}
 \end{figure}
 
-% Bloque desactivado: no se referencia en el cuerpo del documento.
-\iffalse
-\begin{table}[H]
-\centering
-\caption{Aportes por logro educativo a la descomposición de la remuneración laboral, 2010--2025}
-\label{tab:descomposicion_remuneracion_educacion_detalle}
-\footnotesize
-\begin{tabular}{@{}p{7.4cm}rr@{}}
-\toprule
-\multicolumn{3}{@{}l}{\textbf{Panel A. Remuneración mensual por trabajador}} \\
-Factor & \shortstack{Aporte al cambio\\(miles de pesos\\mensuales de 2025)} & \shortstack{\% del\\cambio total} \\
-\midrule
-Productividad: Primaria o menos & 34,0 & 8,6\% \\
-Productividad: Secundaria o media & 63,5 & 16,1\% \\
-Productividad: Superior o universitaria & 41,2 & 10,4\% \\
-Logro educativo: Primaria o menos & -140,6 & -35,6\% \\
-Logro educativo: Secundaria o media & 51,5 & 13,0\% \\
-Logro educativo: Superior o universitaria & 345,4 & 87,4\% \\
-\midrule
-\textbf{Total} & 395,0 & 100,0\% \\
-\addlinespace[0.6em]
-\multicolumn{3}{@{}l}{\textbf{Panel B. Remuneración por hora trabajada}} \\
-Factor & \shortstack{Aporte al cambio\\(pesos de 2025\\por hora)} & \shortstack{\% del\\cambio total} \\
-\midrule
-Productividad: Primaria o menos & 302 & 11,6\% \\
-Productividad: Secundaria o media & 544 & 20,8\% \\
-Productividad: Superior o universitaria & 345 & 13,2\% \\
-Logro educativo: Primaria o menos & -754 & -28,9\% \\
-Logro educativo: Secundaria o media & 235 & 9,0\% \\
-Logro educativo: Superior o universitaria & 1.940 & 74,3\% \\
-\midrule
-\textbf{Total} & 2.612 & 100,0\% \\
-\bottomrule
-\end{tabular}
-\caption*{\footnotesize Nota: los aportes al cambio preservan el signo de cada contribución. Valores positivos aumentan el cambio agregado y valores negativos lo reducen. Los porcentajes dividen cada factor por el cambio total del indicador correspondiente. Los factores de productividad corresponden a \(\bar{s}_g(r_{g,2025}-r_{g,2010})\). Los factores de logro educativo corresponden a \(\bar{r}_g(s_{g,2025}-s_{g,2010})\). Las sumas pueden no coincidir por redondeo. Fuente: cálculos propios con GEIH del DANE.}
-\end{table}
-\fi
+\input{Paper/sections/descomposicion_remuneracion_educacion_detalle_table}
 
 % Bloque desactivado: no se referencia en el cuerpo del documento.
 \iffalse
@@ -163,9 +133,12 @@ Superior o universitaria & 67,5\% & 32,5\% & 76,0\% & 24,0\% \\
 \input{Paper/sections/remuneracion_educacion_formalidad_table}
 \fi
 
+% Bloque desactivado: no se referencia en el cuerpo del documento.
+\iffalse
 \input{Paper/sections/remuneracion_educacion_cohorte_table}
 
 \input{Paper/sections/remuneracion_educacion_cohortes_nacimiento_table}
+\fi
 
 % Bloque desactivado: no se referencia en el cuerpo del documento.
 \iffalse
