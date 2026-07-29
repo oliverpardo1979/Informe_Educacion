@@ -240,7 +240,7 @@ def main() -> None:
         draw,
         35,
         "Panel A. Variaci\u00f3n 2010-2025 en la remuneraci\u00f3n mensual por trabajador",
-        "Miles de pesos mensuales de 2025",
+        "Miles de pesos de 2025",
         worker,
         "worker",
         500,

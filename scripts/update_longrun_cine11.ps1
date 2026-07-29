@@ -598,7 +598,7 @@ public class Cine11LongRunBuilder {
         lines.Add("\\caption{Descomposici\u00f3n de la variaci\u00f3n en la remuneraci\u00f3n laboral, 2010--2025}");
         lines.Add("\\label{tab:descomposicion_remuneracion_educacion}");
         lines.Add("\\includegraphics[width=0.98\\textwidth]{Paper/figures/fig_descomposicion_remuneracion_educacion_cascada.png}");
-        lines.Add("\\caption*{\\footnotesize Nota: el Panel A mide la variaci\u00f3n de la remuneraci\u00f3n mensual por trabajador en miles de pesos mensuales de 2025. El Panel B mide la variaci\u00f3n de la remuneraci\u00f3n por hora trabajada en pesos de 2025 por hora. ``Mayor productividad de cada logro educativo'' mide el aporte de los cambios de remuneraci\u00f3n dentro de cada logro educativo. ``Mayor logro educativo de la poblaci\u00f3n ocupada'' mide el aporte de los cambios en el peso relativo de esos logros. La descomposici\u00f3n usa los ponderadores promedio de 2010 y 2025. Fuente: c\u00e1lculos propios con GEIH del DANE.}");
+        lines.Add("\\caption*{\\footnotesize Nota: el Panel A mide la variaci\u00f3n de la remuneraci\u00f3n mensual por trabajador en miles de pesos de 2025. El Panel B mide la variaci\u00f3n de la remuneraci\u00f3n por hora trabajada en pesos de 2025 por hora. ``Mayor productividad de cada logro educativo'' mide el aporte de los cambios de remuneraci\u00f3n dentro de cada logro educativo. ``Mayor logro educativo de la poblaci\u00f3n ocupada'' mide el aporte de los cambios en el peso relativo de esos logros. La descomposici\u00f3n usa los ponderadores promedio de 2010 y 2025. Fuente: c\u00e1lculos propios con GEIH del DANE.}");
         lines.Add("\\end{table}");
         File.WriteAllLines(tablePath, lines, new UTF8Encoding(false));
     }
@@ -679,7 +679,7 @@ public class Cine11LongRunBuilder {
                 using (System.Drawing.Font label = new System.Drawing.Font("Arial", 22, System.Drawing.FontStyle.Regular))
                 using (System.Drawing.Font small = new System.Drawing.Font("Arial", 20, System.Drawing.FontStyle.Regular))
                 using (System.Drawing.SolidBrush text = new System.Drawing.SolidBrush(System.Drawing.Color.FromArgb(25,25,25))) {
-                    DrawPanel(g, panels["trabajador"], "Panel A. Variaci\u00f3n 2010-2025 en la remuneraci\u00f3n mensual por trabajador", "Miles de pesos mensuales de 2025", 70, 45, 910, 400, true, subtitle, label, small);
+                    DrawPanel(g, panels["trabajador"], "Panel A. Variaci\u00f3n 2010-2025 en la remuneraci\u00f3n mensual por trabajador", "Miles de pesos de 2025", 70, 45, 910, 400, true, subtitle, label, small);
                     DrawPanel(g, panels["hora"], "Panel B. Variaci\u00f3n 2010-2025 en la remuneraci\u00f3n por hora trabajada", "Pesos de 2025", 70, 540, 910, 400, false, subtitle, label, small);
                 }
             }
