@@ -79,7 +79,7 @@ DISPLAY_LABELS = {
     "Normalista": "Normalista",
     "Tecnica profesional": "Técnica profesional",
     "Tecnologica": "Tecnológica",
-    "Universitaria": "Universitaria",
+    "Universitaria": "Pregrado universitario",
     "Especializacion": "Especialización",
     "Maestria": "Maestría",
     "Doctorado": "Doctorado",

@@ -74,8 +74,8 @@ public class Cine11LongRunBuilder {
         {2, "B\u00e1sica primaria"},
         {3, "B\u00e1sica secundaria"},
         {4, "Educaci\u00f3n media"},
-        {5, "T\u00e9cnica profesional y tecnol\u00f3gica"},
-        {6, "Universitaria"},
+        {5, "T\u00e9cnico o tecnol\u00f3gico"},
+        {6, "Pregrado universitario"},
         {7, "Posgrado"},
         {98, "No determinado"}
     };

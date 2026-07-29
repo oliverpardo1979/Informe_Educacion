@@ -40,7 +40,7 @@ SMLMV_NOMINAL = {
 TARGETS = {
     10: {
         "title_code": 7,
-        "name": "Universitaria",
+        "name": "Pregrado universitario",
         "color": "#009e73",
     },
     11: {
