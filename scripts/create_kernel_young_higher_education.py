@@ -11,13 +11,16 @@ from PIL import Image, ImageDraw, ImageFont
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DATA_PATH = (
     REPO_ROOT.parent
-    / "CJC-Monitor"
-    / "Datos"
-    / "Processed"
-    / "Paper-GEIH_base_modelo_personas_2008_2025.dta"
+    / "tmp"
+    / "cine11_download"
+    / "BaseconCINE11.dta"
 )
 FIG_DIR = REPO_ROOT / "Paper" / "figures"
 TABLE_DIR = REPO_ROOT / "Paper" / "tables"
+SECTION_DIR = REPO_ROOT / "Paper" / "sections"
+FIG_OUTPUT = FIG_DIR / "fig_kernel_pregrado_universitario_25_29_2010_2025.png"
+STATS_OUTPUT = TABLE_DIR / "remuneracion_pregrado_universitario_25_29_2010_2025_stats.csv"
+TABLE_OUTPUT = SECTION_DIR / "remuneracion_pregrado_universitario_25_29_2010_2025_table.tex"
 
 START_YEAR = 2010
 END_YEAR = 2025
@@ -120,12 +123,12 @@ def fmt_pesos(value: float) -> str:
     return f"{value:,.0f}".replace(",", ".")
 
 
-def is_higher_education(value: object) -> bool:
+def is_undergrad(value: object) -> bool:
     if pd.isna(value):
         return False
     if isinstance(value, str):
         normalized = value.strip().lower()
-        return normalized in {"superior o universitaria", "universitaria o superior"}
+        return normalized in {"universitaria", "pregrado universitario"}
     return float(value) == 6
 
 
@@ -167,7 +170,7 @@ def weighted_kde(log_values: np.ndarray, weights: np.ndarray, grid: np.ndarray) 
 
 
 def load_microdata() -> pd.DataFrame:
-    columns = ["anio", "edad", "fex", "horas", "ingreso_hora_real", "educ_hom_cod"]
+    columns = ["anio", "edad", "fex", "horas", "ingreso_hora_real", "cine11_hom_cod"]
     parts: list[pd.DataFrame] = []
     reader = pd.read_stata(
         DATA_PATH,
@@ -190,7 +193,7 @@ def load_microdata() -> pd.DataFrame:
         ].copy()
         if chunk.empty:
             continue
-        chunk = chunk[chunk["educ_hom_cod"].map(is_higher_education)].copy()
+        chunk = chunk[chunk["cine11_hom_cod"].map(is_undergrad)].copy()
         if chunk.empty:
             continue
         parts.append(
@@ -230,6 +233,7 @@ def build_summary(microdata: pd.DataFrame) -> pd.DataFrame:
                     "obs_sin_expandir": len(subset),
                     "ocupados_expandido": weights.sum(),
                     "promedio": np.average(values, weights=weights),
+                    "desv_est": weighted_std(values, weights),
                     "p10": p10,
                     "p25": p25,
                     "mediana": p50,
@@ -237,9 +241,110 @@ def build_summary(microdata: pd.DataFrame) -> pd.DataFrame:
                     "p90": p90,
                     "p90_p10": p90 / p10,
                     "desv_est_log": weighted_std(np.log(values), weights),
+                    "masa_0_9_1_1_smlmv": np.nan,
                 }
             )
+            if variable == "rem_mensual":
+                smlmv = SMLMV_NOMINAL[year] * IPC_DIC[END_YEAR] / IPC_DIC[year]
+                close = (values >= 0.9 * smlmv) & (values <= 1.1 * smlmv)
+                rows[-1]["masa_0_9_1_1_smlmv"] = weights[close].sum() / weights.sum()
     return pd.DataFrame(rows)
+
+
+def fmt_percent(value: float, digits: int = 1) -> str:
+    return f"{100 * value:.{digits}f}\\%".replace(".", ",")
+
+
+def write_table(summary: pd.DataFrame) -> None:
+    monthly = summary[summary["indicador"] == "Remuneración mensual equivalente"].set_index("anio")
+    hourly = summary[summary["indicador"] == "Remuneración por hora trabajada"].set_index("anio")
+
+    lines = [
+        r"\begin{table}[H]",
+        r"\centering",
+        r"\caption{Remuneración de ocupados de 25 a 29 años con pregrado universitario, 2010 y 2025}",
+        r"\label{tab:remuneracion_pregrado_universitario_25_29_larga}",
+        r"\footnotesize",
+        r"\begin{tabular}{@{}p{7.4cm}rr@{}}",
+        r"\toprule",
+        r"Indicador & 2010 & 2025 \\",
+        r"\midrule",
+        r"\multicolumn{3}{@{}l}{\textbf{Panel A. Remuneración mensual por trabajador}} \\",
+        (
+            "Ocupados (miles)"
+            + f" & {fmt_decimal(monthly.loc[2010, 'ocupados_expandido'] / 1_000, 1)}"
+            + f" & {fmt_decimal(monthly.loc[2025, 'ocupados_expandido'] / 1_000, 1)}"
+            + r" \\"
+        ),
+        (
+            "Promedio (millones de pesos de 2025)"
+            + f" & {fmt_decimal(monthly.loc[2010, 'promedio'] / 1_000_000, 1)}"
+            + f" & {fmt_decimal(monthly.loc[2025, 'promedio'] / 1_000_000, 1)}"
+            + r" \\"
+        ),
+        (
+            "Mediana (millones de pesos de 2025)"
+            + f" & {fmt_decimal(monthly.loc[2010, 'mediana'] / 1_000_000, 1)}"
+            + f" & {fmt_decimal(monthly.loc[2025, 'mediana'] / 1_000_000, 1)}"
+            + r" \\"
+        ),
+        (
+            "Desviación estándar (millones de pesos de 2025)"
+            + f" & {fmt_decimal(monthly.loc[2010, 'desv_est'] / 1_000_000, 1)}"
+            + f" & {fmt_decimal(monthly.loc[2025, 'desv_est'] / 1_000_000, 1)}"
+            + r" \\"
+        ),
+        (
+            "Razón P90/P10"
+            + f" & {fmt_decimal(monthly.loc[2010, 'p90_p10'], 1)}"
+            + f" & {fmt_decimal(monthly.loc[2025, 'p90_p10'], 1)}"
+            + r" \\"
+        ),
+        (
+            "Entre 0,9 y 1,1 SMLMV"
+            + f" & {fmt_percent(monthly.loc[2010, 'masa_0_9_1_1_smlmv'], 1)}"
+            + f" & {fmt_percent(monthly.loc[2025, 'masa_0_9_1_1_smlmv'], 1)}"
+            + r" \\"
+        ),
+        r"\addlinespace[0.6em]",
+        r"\multicolumn{3}{@{}l}{\textbf{Panel B. Remuneración por hora trabajada}} \\",
+        (
+            "Promedio (miles de pesos de 2025)"
+            + f" & {fmt_decimal(hourly.loc[2010, 'promedio'] / 1_000, 1)}"
+            + f" & {fmt_decimal(hourly.loc[2025, 'promedio'] / 1_000, 1)}"
+            + r" \\"
+        ),
+        (
+            "Mediana (miles de pesos de 2025)"
+            + f" & {fmt_decimal(hourly.loc[2010, 'mediana'] / 1_000, 1)}"
+            + f" & {fmt_decimal(hourly.loc[2025, 'mediana'] / 1_000, 1)}"
+            + r" \\"
+        ),
+        (
+            "Desviación estándar (miles de pesos de 2025)"
+            + f" & {fmt_decimal(hourly.loc[2010, 'desv_est'] / 1_000, 1)}"
+            + f" & {fmt_decimal(hourly.loc[2025, 'desv_est'] / 1_000, 1)}"
+            + r" \\"
+        ),
+        (
+            "Razón P90/P10"
+            + f" & {fmt_decimal(hourly.loc[2010, 'p90_p10'], 1)}"
+            + f" & {fmt_decimal(hourly.loc[2025, 'p90_p10'], 1)}"
+            + r" \\"
+        ),
+        r"\bottomrule",
+        r"\end{tabular}",
+        (
+            r"\caption*{\footnotesize Nota: la muestra se restringe a ocupados de 25 a 29 años "
+            r"cuyo logro educativo armonizado es pregrado universitario. La GEIH no identifica "
+            r"el año de graduación. Por lo tanto, este grupo aproxima a los recién egresados, "
+            r"pero no los observa directamente. El SMLMV se expresa en pesos constantes de 2025 "
+            r"y no incluye auxilio de transporte. Fuente: cálculos propios con GEIH del DANE.}"
+        ),
+        r"\end{table}",
+        "",
+    ]
+    TABLE_OUTPUT.write_text("\n".join(lines), encoding="utf-8")
 
 
 def prepare_kernel_series(microdata: pd.DataFrame, variable: str, scale: float) -> dict[str, object]:
@@ -292,7 +397,7 @@ def draw_kernel_figure(microdata: pd.DataFrame, summary: pd.DataFrame) -> None:
     draw_text(
         draw,
         (80, 48),
-        "Distribución de la remuneración: jóvenes con educación superior",
+        "Distribución de la remuneración: pregrado universitario 25-29 años",
         "#111111",
         41,
         True,
@@ -397,20 +502,22 @@ def draw_kernel_figure(microdata: pd.DataFrame, summary: pd.DataFrame) -> None:
     draw_text(
         draw,
         (80, 962),
-        "El grupo aproxima jóvenes con educación superior. La GEIH no identifica año de graduación. SMLMV sin auxilio de transporte.",
+        "El grupo aproxima a los recién egresados. La GEIH no identifica año de graduación. SMLMV sin auxilio de transporte.",
         "#555555",
         21,
     )
     draw_text(draw, (80, 994), "Fuente: cálculos propios con GEIH del DANE. SMLMV según decretos del Gobierno nacional.", "#555555", 21)
 
-    img.save(FIG_DIR / "fig_kernel_remuneracion_universitaria_25_29_2010_2025.png", quality=95)
+    img.save(FIG_OUTPUT, quality=95)
 
 
 def main() -> None:
     TABLE_DIR.mkdir(parents=True, exist_ok=True)
+    SECTION_DIR.mkdir(parents=True, exist_ok=True)
     microdata = load_microdata()
     summary = build_summary(microdata)
-    summary.to_csv(TABLE_DIR / "remuneracion_universitaria_25_29_kernel_stats.csv", index=False)
+    summary.to_csv(STATS_OUTPUT, index=False)
+    write_table(summary)
     draw_kernel_figure(microdata, summary)
     print(summary.to_string(index=False))
 
