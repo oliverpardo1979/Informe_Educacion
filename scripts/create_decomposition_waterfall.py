@@ -86,8 +86,7 @@ def signed_number(value: float, mode: str) -> str:
     sign = "+" if value >= 0 else "-"
     absolute = abs(value)
     if mode == "worker":
-        rounded = round(absolute / 10) * 10
-        return f"{sign}{int(rounded)}"
+        return f"{sign}{int(round(absolute))}"
     return f"{sign}{dot_thousands(absolute)}"
 
 
