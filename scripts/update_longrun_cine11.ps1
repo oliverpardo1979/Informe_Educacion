@@ -679,8 +679,8 @@ public class Cine11LongRunBuilder {
                 using (System.Drawing.Font label = new System.Drawing.Font("Arial", 22, System.Drawing.FontStyle.Regular))
                 using (System.Drawing.Font small = new System.Drawing.Font("Arial", 20, System.Drawing.FontStyle.Regular))
                 using (System.Drawing.SolidBrush text = new System.Drawing.SolidBrush(System.Drawing.Color.FromArgb(25,25,25))) {
-                    DrawPanel(g, panels["trabajador"], "Panel A. Remuneraci\u00f3n mensual por trabajador", "miles de pesos mensuales de 2025", 70, 45, 910, 400, true, subtitle, label, small);
-                    DrawPanel(g, panels["hora"], "Panel B. Remuneraci\u00f3n por hora trabajada", "pesos de 2025 por hora", 70, 540, 910, 400, false, subtitle, label, small);
+                    DrawPanel(g, panels["trabajador"], "Panel A. Variaci\u00f3n en la remuneraci\u00f3n mensual por trabajador", "Miles de pesos mensuales de 2025", 70, 45, 910, 400, true, subtitle, label, small);
+                    DrawPanel(g, panels["hora"], "Panel B. Variaci\u00f3n en la remuneraci\u00f3n por hora trabajada", "Pesos de 2025", 70, 540, 910, 400, false, subtitle, label, small);
                 }
             }
             bmp.Save(path, System.Drawing.Imaging.ImageFormat.Png);
@@ -709,6 +709,7 @@ public class Cine11LongRunBuilder {
         System.Drawing.Color orange = System.Drawing.Color.FromArgb(230, 126, 34);
         System.Drawing.Color green = System.Drawing.Color.FromArgb(0, 150, 110);
         using (System.Drawing.Pen axis = new System.Drawing.Pen(System.Drawing.Color.FromArgb(150,150,150), 2))
+        using (System.Drawing.Pen connector = new System.Drawing.Pen(System.Drawing.Color.FromArgb(120,120,120), 3))
         using (System.Drawing.SolidBrush text = new System.Drawing.SolidBrush(System.Drawing.Color.FromArgb(25,25,25)))
         using (System.Drawing.SolidBrush blueBrush = new System.Drawing.SolidBrush(blue))
         using (System.Drawing.SolidBrush orangeBrush = new System.Drawing.SolidBrush(orange))
@@ -719,6 +720,8 @@ public class Cine11LongRunBuilder {
             DrawBar(g, blueBrush, xs[0], baseline, Y(prodD), barW);
             DrawBar(g, orangeBrush, xs[1], Y(prodD), Y(prodD + eduD), barW);
             DrawBar(g, greenBrush, xs[2], baseline, Y(totalD), barW);
+            g.DrawLine(connector, xs[0] + barW / 2, Y(prodD), xs[1] - barW / 2, Y(prodD));
+            g.DrawLine(connector, xs[1] + barW / 2, Y(totalD), xs[2] - barW / 2, Y(totalD));
             g.DrawString("Productividad", smallFont, text, xs[0] - 70, baseline + 14);
             g.DrawString("Logro educativo", smallFont, text, xs[1] - 85, baseline + 14);
             g.DrawString("Total", smallFont, text, xs[2] - 25, baseline + 14);

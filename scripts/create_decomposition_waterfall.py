@@ -20,6 +20,7 @@ GRID = "#e6e6e6"
 AXIS = "#444444"
 TEXT = "#111111"
 MUTED = "#555555"
+CONNECTOR = "#777777"
 
 
 def font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont:
@@ -94,13 +95,13 @@ def read_data() -> dict[str, dict[str, float]]:
     rows: dict[str, dict[str, float]] = {}
     with DATA.open("r", encoding="utf-8-sig", newline="") as handle:
         for row in csv.DictReader(handle):
-            key = row["indicador_key"]
+            key = row.get("indicador_key") or row["indicador"]
             rows[key] = {
                 "total": float(row["cambio_total"]),
-                "productivity": float(row["cambio_niveles"]),
-                "education": float(row["cambio_composicion"]),
-                "share_productivity": float(row["participacion_niveles"]),
-                "share_education": float(row["participacion_composicion"]),
+                "productivity": float(row.get("cambio_niveles") or row["cambio_productividad"]),
+                "education": float(row.get("cambio_composicion") or row["cambio_logro"]),
+                "share_productivity": float(row.get("participacion_niveles") or row["participacion_productividad"]),
+                "share_education": float(row.get("participacion_composicion") or row["participacion_logro"]),
             }
     return rows
 
@@ -198,8 +199,8 @@ def draw_panel(
             xs[1] - bar_w // 2,
             y_pos(productivity, top, bottom, ymax),
         ),
-        fill="#9a9a9a",
-        width=2,
+        fill=CONNECTOR,
+        width=3,
     )
     draw.line(
         (
@@ -208,8 +209,8 @@ def draw_panel(
             xs[2] - bar_w // 2,
             y_pos(total, top, bottom, ymax),
         ),
-        fill="#9a9a9a",
-        width=2,
+        fill=CONNECTOR,
+        width=3,
     )
 
     draw_label(draw, xs[0], first_top - 48, productivity, values["share_productivity"], mode)
@@ -231,16 +232,15 @@ def main() -> None:
     draw = ImageDraw.Draw(img)
 
     worker = data["trabajador"].copy()
-    worker = {key: value * 1000 if key in {"total", "productivity", "education"} else value for key, value in worker.items()}
+    worker = {key: value / 1000 if key in {"total", "productivity", "education"} else value for key, value in worker.items()}
 
     hour = data["hora"].copy()
-    hour = {key: value * 1000 if key in {"total", "productivity", "education"} else value for key, value in hour.items()}
 
     draw_panel(
         draw,
         35,
-        "Panel A. Remuneraci\u00f3n mensual por trabajador",
-        "Variaci\u00f3n en miles de pesos mensuales de 2025",
+        "Panel A. Variaci\u00f3n en la remuneraci\u00f3n mensual por trabajador",
+        "Miles de pesos mensuales de 2025",
         worker,
         "worker",
         500,
@@ -251,8 +251,8 @@ def main() -> None:
     draw_panel(
         draw,
         555,
-        "Panel B. Remuneraci\u00f3n por hora trabajada",
-        "Variaci\u00f3n en pesos de 2025 por hora",
+        "Panel B. Variaci\u00f3n en la remuneraci\u00f3n por hora trabajada",
+        "Pesos de 2025",
         hour,
         "hour",
         3200,
