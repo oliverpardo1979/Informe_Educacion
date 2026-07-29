@@ -780,16 +780,24 @@ public class Cine11LongRunBuilder {
         int plotW = w - 110;
         int plotH = h - 120;
         int[] codes = new int[] {1000,1,2,3,4,5,6,7};
-        double max = codes.SelectMany(c => series.Where(r => r.Code == c).Select(r => monthly ? r.RemTrabajador / 1000000.0 : r.RemHora / 1000.0)).Max() * 1.1;
-        double min = 0.0;
+        double min = monthly ? 0.7 : 3.5;
+        double max = monthly ? 8.0 : 45.0;
+        double logMin = Math.Log(min);
+        double logMax = Math.Log(max);
+        double[] ticks = monthly
+            ? new double[] {0.8, 1.0, 1.5, 2.0, 3.0, 5.0, 8.0}
+            : new double[] {4.0, 5.0, 7.5, 10.0, 15.0, 25.0, 40.0};
         Func<int,int> X = delegate(int year) { return plotX + (int)Math.Round(((year - 2010.0) / 15.0) * plotW); };
-        Func<double,int> Y = delegate(double val) { return plotY + plotH - (int)Math.Round(((val - min) / (max - min)) * plotH); };
+        Func<double,int> Y = delegate(double val) {
+            double safeVal = Math.Max(min, Math.Min(max, val));
+            return plotY + plotH - (int)Math.Round(((Math.Log(safeVal) - logMin) / (logMax - logMin)) * plotH);
+        };
         using (System.Drawing.SolidBrush text = new System.Drawing.SolidBrush(System.Drawing.Color.FromArgb(25,25,25)))
         using (System.Drawing.Pen axis = new System.Drawing.Pen(System.Drawing.Color.FromArgb(140,140,140), 2))
         using (System.Drawing.Pen grid = new System.Drawing.Pen(System.Drawing.Color.FromArgb(225,225,225), 1)) {
             g.DrawString(title, titleFont, text, x, y);
-            for (int i = 0; i <= 4; i++) {
-                double val = min + (max - min) * i / 4.0;
+            foreach (double val in ticks) {
+                if (val < min || val > max) continue;
                 int yy = Y(val);
                 g.DrawLine(grid, plotX, yy, plotX + plotW, yy);
                 g.DrawString(Dec(val, 1), smallFont, text, plotX - 65, yy - 10);
