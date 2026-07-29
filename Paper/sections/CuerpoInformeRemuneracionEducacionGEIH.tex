@@ -41,40 +41,41 @@ Media & Media técnica \\
 Técnico o tecnológico & Normalista \\
 Técnico o tecnológico & Técnico \\
 Técnico o tecnológico & Tecnológico \\
-Pregrado universitario o posgrado & Pregrado universitario \\
-Pregrado universitario o posgrado & Especialización \\
-Pregrado universitario o posgrado & Maestría \\
-Pregrado universitario o posgrado & Doctorado \\
+Pregrado universitario & Pregrado universitario \\
+Posgrado & Especialización \\
+Posgrado & Maestría \\
+Posgrado & Doctorado \\
 \bottomrule
 \end{tabular}
-\caption*{\footnotesize Nota: las respuestas no sabe o no informa se tratan como no determinadas y se excluyen de la serie de remuneración. Fuente: cálculos propios con GEIH del DANE.}
+\caption*{\footnotesize Fuente: Elaboración propia con base en la GEIH del DANE.}
 \end{table}
 
 \subsection{Descomposición del crecimiento de la remuneración}
 
-\textbf{El crecimiento de la remuneración promedio puede descomponerse en dos componentes.} La remuneración promedio de la población ocupada puede escribirse como un promedio ponderado de la remuneración de cada logro educativo. Sea \(g\) uno de los logros educativos usados en los cuadros de remuneración, \(r_{g,t}\) la remuneración del grupo \(g\) en el año \(t\), y \(s_{g,t}\) su peso relativo. Tanto la remuneración por trabajador como la remuneración por hora trabajada se pueden escribir como:
+\textbf{El crecimiento de la remuneración promedio puede descomponerse en dos componentes.} La remuneración promedio de la población ocupada puede escribirse como un promedio ponderado de la remuneración de cada logro educativo. Sea \(r_{gt}\)   la remuneración promedio del logro \(g\) en el año \(t\). Sea \(s_{gt}\) el peso relativo del logro \(g\) en el año \(t\). La remuneración promedio de la población ocupada se puede escribir como:
 \begin{equation}\label{eq:remuneracion_promedio_educacion}
-R_t = \sum_g s_{g,t} r_{g,t}.
+R_t = \sum_g s_{gt} r_{gt}.
 \end{equation}
-El cambio entre 2010 y 2025 puede escribirse como la suma de dos términos. Definiendo \(\bar{s}_g=(s_{g,2010}+s_{g,2025})/2\) y \(\bar{r}_g=(r_{g,2010}+r_{g,2025})/2\), se tiene:
+El cambio en la remuneración promedio de la población ocupada entre 2010 y 2025 puede escribirse como la suma de dos términos. Definiendo \(\bar{s}_g=\frac{1}{2}(s_{g2010}+s_{g2025})\) y \(\bar{r}_g=\frac{1}{2}(r_{g2010}+r_{g2025})/2\), se tiene:
 \begin{equation}\label{eq:descomposicion_educacion}
 \begin{aligned}
 R_{2025}-R_{2010}
 &=
-\underbrace{\sum_g \bar{s}_g \left(r_{g,2025}-r_{g,2010}\right)}_{\substack{\text{mayor productividad}\\\text{de cada logro educativo}}} \\
+\underbrace{\sum_g \bar{s}_g \left(r_{g2025}-r_{g2010}\right)}_{\substack{\text{mayor productividad}\\\text{de cada logro educativo}}} \\
 &\quad +
-\underbrace{\sum_g \bar{r}_g \left(s_{g,2025}-s_{g,2010}\right)}_{\substack{\text{mayor logro educativo}\\\text{de la población ocupada}}}.
+\underbrace{\sum_g \bar{r}_g \left(s_{g2025}-s_{g2010}\right)}_{\substack{\text{mayor logro educativo}\\\text{de la población ocupada}}}.
 \end{aligned}
 \end{equation}
-El primer término mide cuánto cambia la remuneración promedio de la población ocupada por variaciones de remuneración dentro de cada logro educativo. Este componente se asocia a la mayor productividad laboral de cada logro educativo. El segundo término mide cuánto cambia la remuneración promedio por variaciones en el peso relativo de los grupos. Este componente se asocia al mayor logro educativo de la población ocupada. %En el Cuadro \ref{tab:descomposicion_remuneracion_educacion}, las etiquetas de la cascada muestran el valor de cada término y su participación en el cambio total \(R_{2025}-R_{2010}\). Por lo tanto, la descomposición no debe leerse como una estimación causal. Su aporte es ordenar cuánto del cambio observado se asocia con mayor productividad de cada logro educativo y cuánto con el mayor logro educativo de la población ocupada.
+El primer término mide cuánto cambia la remuneración promedio de la población ocupada por variaciones en la remuneración de cada logro educativo. Este componente se asocia a la mayor productividad laboral de cada logro educativo. El segundo término mide cuánto cambia la remuneración promedio por variaciones en el peso relativo de cada logro. Este componente se asocia al mayor logro educativo de la población ocupada. %En el Cuadro \ref{tab:descomposicion_remuneracion_educacion}, las etiquetas de la cascada muestran el valor de cada término y su participación en el cambio total \(R_{2025}-R_{2010}\). Por lo tanto, la descomposición no debe leerse como una estimación causal. Su aporte es ordenar cuánto del cambio observado se asocia con mayor productividad de cada logro educativo y cuánto con el mayor logro educativo de la población ocupada.
 
 \section{Dinámicas de largo plazo}\label{sec:grupos_comparables}
 
-\textbf{Esta sección presenta la dinámica de la remuneración de los logros educativos comparables a lo largo del periodo 2010--2025.} Esta sección responde tres preguntas: cómo cambió el logro educativo de la población ocupada, cómo evolucionó la remuneración por trabajador y la remuneración por hora de cada logro, y cuánto del aumento de la remuneración provino de la mayor productividad de cada logro educativo o del mayor logro educativo de la población ocupada.
+\textbf{Esta sección presenta la dinámica de la remuneración de los logros educativos comparables a lo largo del periodo 2010--2025.} Esta sección responde tres preguntas: cómo cambió el logro educativo de la población ocupada, cómo evolucionó la remuneración por trabajador y la remuneración por hora de cada logro, y cuánto del aumento de la remuneración de la población ocupada provino de la mayor productividad de cada logro educativo o del mayor logro educativo de la población ocupada.
 
 \subsection{Logro educativo}
 
-\textbf{El Cuadro \ref{tab:remuneracion_educacion_comparable} presenta el logro educativo de los ocupados al inicio y al final del periodo.} A diferencia de los cuadros de remuneración, este cuadro usa toda la población ocupada y por eso coincide con el total oficial del DANE: 18,6 millones de ocupados en 2010 y 23,8 millones en 2025. Durante el periodo cayó la participación de quienes no tenían educación o solo alcanzaron básica primaria, mientras aumentó el peso de educación media, formación técnica o tecnológica, pregrado universitario y posgrado. En conjunto, estos últimos cuatro logros pasaron de representar 45,3\% a 66,3\% de la población ocupada. Ese cambio muestra el mayor logro educativo de la población ocupada.
+\textbf{El Cuadro \ref{tab:remuneracion_educacion_comparable} presenta el logro educativo de los ocupados al inicio y al final del periodo.} %A diferencia de los cuadros de remuneración, este cuadro usa toda la población ocupada y por eso coincide con el total oficial del DANE: 18,6 millones de ocupados en 2010 y 23,8 millones en 2025. 
+Durante el periodo cayó la participación de quienes no tenían educación o solo alcanzaron básica primaria, mientras aumentó el peso de educación media, formación técnica o tecnológica, pregrado universitario y posgrado. En conjunto, estos últimos cuatro logros pasaron de representar 45,3\% a 66,3\% de la población ocupada. Ese cambio muestra el mayor logro educativo de la población ocupada.
 
 \input{Paper/sections/ocupacion_educacion_comparable_table}
 
@@ -84,11 +85,11 @@ El primer término mide cuánto cambia la remuneración promedio de la població
 
 \input{Paper/sections/remuneracion_educacion_comparable_table}
 
-\textbf{La remuneración promedio aumenta con el logro educativo, pero no creció rápido dentro de cada logro.} En 2025, la remuneración mensual por trabajador fue de 900 mil pesos entre quienes no reportaron ningún logro educativo, 1,5 millones en educación media, 1,9 millones en formación técnica o tecnológica, 3,5 millones en pregrado universitario y 6,9 millones en posgrado. La remuneración por hora conserva el mismo orden: 5,0 mil pesos para ninguno, 7,5 mil en educación media, 9,8 mil en formación técnica o tecnológica, 18,9 mil en pregrado universitario y 37,6 mil en posgrado.
+\textbf{Como es de esperarse, la remuneración aumenta con el logro educativo.} En 2025, la remuneración mensual por trabajador fue de 900 mil pesos entre quienes no reportaron ningún logro educativo, 1,5 millones en educación media, 1,9 millones en formación técnica o tecnológica, 3,5 millones en pregrado universitario y 6,9 millones en posgrado. La remuneración por hora conserva el mismo orden: 5,0 mil pesos para ninguno, 7,5 mil en educación media, 9,8 mil en formación técnica o tecnológica, 18,9 mil en pregrado universitario y 37,6 mil en posgrado.
 
-\textbf{El total creció más rápido que la remuneración de cada logro educativo porque cambió la composición de la población ocupada.} La remuneración mensual por trabajador del total pasó de 1,5 a 1,9 millones de pesos, con crecimiento anual de 1,6\%. Dentro de los logros educativos, el crecimiento mensual fue menor: ninguno, básica primaria y básica secundaria crecieron alrededor de 0,6\% o 0,7\% anual, educación media creció 0,4\%, formación técnica o tecnológica cayó 0,1\%, pregrado universitario cayó 0,6\% y posgrado se mantuvo prácticamente estable. La remuneración por hora del total creció 2,0\% anual, también por encima del crecimiento observado dentro de cada logro educativo.
+\textbf{Desafortunadamente, la remuneración de cada logro crece lentamente, en el mejor de los casos.} La remuneración mensual por trabajador para el total de la población ocupada pasó de 1,5 a 1,9 millones de pesos, con crecimiento anual de 1,6\%. Sin embargo, la remuneración promedio por trabajador de ningún logro supera un crecimiento del 0,7\% anual. Para quienes alcanzaron el posgrado o la formación técnica o tecnológica la remuneración se mantuvo igual que hace 15 años. Peor aún, disminuyo un 0,6\% anual para quienes tan solo alcanzaron pregrado universitario. La remuneración por hora tuvo un comportamiento ligeramente más favorable para todos los logros educativos, aunque la remuneración por hora de quienes a los sumo alcanzaron pregrado universitario sigue cayendo.
 
-\textbf{Las razones frente al logro de menor remuneración siguen siendo amplias, aunque se redujeron entre 2010 y 2025.} En 2025, la remuneración mensual de quienes alcanzaron pregrado universitario fue cuatro veces la remuneración de quienes no reportaron ningún logro educativo. En posgrado, la razón fue de 7,8 veces. La remuneración por hora muestra una diferencia parecida: 3,8 veces para pregrado universitario y 7,6 veces para posgrado.
+%\textbf{Las razones frente al logro de menor remuneración siguen siendo amplias, aunque se redujeron entre 2010 y 2025.} En 2025, la remuneración mensual de quienes alcanzaron pregrado universitario fue cuatro veces la remuneración de quienes no reportaron ningún logro educativo. En posgrado, la razón fue de 7,8 veces. La remuneración por hora muestra una diferencia parecida: 3,8 veces para pregrado universitario y 7,6 veces para posgrado.
 
 \textbf{La evolución anual de la remuneración se presenta en el apéndice.} La Figura \ref{fig:remuneracion_educacion_series_comparables} muestra la trayectoria de la remuneración por trabajador y por hora para el total y para cada logro educativo. La recuperación reciente, más visible en la remuneración por hora, podría estar asociada con los aumentos recientes del salario mínimo real. Evaluar esa relación está por fuera del alcance de este informe.
 
