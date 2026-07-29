@@ -679,8 +679,8 @@ public class Cine11LongRunBuilder {
                 using (System.Drawing.Font label = new System.Drawing.Font("Arial", 22, System.Drawing.FontStyle.Regular))
                 using (System.Drawing.Font small = new System.Drawing.Font("Arial", 20, System.Drawing.FontStyle.Regular))
                 using (System.Drawing.SolidBrush text = new System.Drawing.SolidBrush(System.Drawing.Color.FromArgb(25,25,25))) {
-                    DrawPanel(g, panels["trabajador"], "Panel A. Variaci\u00f3n en la remuneraci\u00f3n mensual por trabajador", "Miles de pesos mensuales de 2025", 70, 45, 910, 400, true, subtitle, label, small);
-                    DrawPanel(g, panels["hora"], "Panel B. Variaci\u00f3n en la remuneraci\u00f3n por hora trabajada", "Pesos de 2025", 70, 540, 910, 400, false, subtitle, label, small);
+                    DrawPanel(g, panels["trabajador"], "Panel A. Variaci\u00f3n 2010-2025 en la remuneraci\u00f3n mensual por trabajador", "Miles de pesos mensuales de 2025", 70, 45, 910, 400, true, subtitle, label, small);
+                    DrawPanel(g, panels["hora"], "Panel B. Variaci\u00f3n 2010-2025 en la remuneraci\u00f3n por hora trabajada", "Pesos de 2025", 70, 540, 910, 400, false, subtitle, label, small);
                 }
             }
             bmp.Save(path, System.Drawing.Imaging.ImageFormat.Png);

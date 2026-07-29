@@ -239,7 +239,7 @@ def main() -> None:
     draw_panel(
         draw,
         35,
-        "Panel A. Variaci\u00f3n en la remuneraci\u00f3n mensual por trabajador",
+        "Panel A. Variaci\u00f3n 2010-2025 en la remuneraci\u00f3n mensual por trabajador",
         "Miles de pesos mensuales de 2025",
         worker,
         "worker",
@@ -251,7 +251,7 @@ def main() -> None:
     draw_panel(
         draw,
         555,
-        "Panel B. Variaci\u00f3n en la remuneraci\u00f3n por hora trabajada",
+        "Panel B. Variaci\u00f3n 2010-2025 en la remuneraci\u00f3n por hora trabajada",
         "Pesos de 2025",
         hour,
         "hour",
